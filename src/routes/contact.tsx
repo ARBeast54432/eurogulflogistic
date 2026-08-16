@@ -42,7 +42,7 @@ function ContactPage() {
   const mutation = useMutation({
     mutationFn: async () => {
       const { error } = await supabase.from("contact_messages").insert({
-        name: form.name.trim(),
+        full_name: form.name.trim(),
         email: form.email.trim(),
         phone: form.phone.trim() || null,
         subject: form.subject.trim() || null,
