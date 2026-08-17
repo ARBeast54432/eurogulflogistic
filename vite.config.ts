@@ -7,7 +7,7 @@
 import process from "node:process";
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-const isVercelBuild = process.env.VERCEL === "1";
+const isVercelBuild = process.env["VERCEL"] === "1";
 
 export default defineConfig({
   nitro: {
