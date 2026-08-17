@@ -48,10 +48,12 @@ function useIsAdmin(userId: string | undefined) {
     queryKey: ["is-admin", userId],
     enabled: Boolean(userId),
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("has_role", {
-        _user_id: userId!,
-        _role: "admin",
-      });
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId!)
+        .eq("role", "admin")
+        .maybeSingle();
       if (error) throw error;
       return Boolean(data);
     },
