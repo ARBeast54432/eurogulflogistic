@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { servicesQueryOptions } from "@/lib/services";
 import { IMAGES } from "@/lib/site";
 
-const TITLE = "Equipment & Services Directory | IronBridge Logistics";
+const TITLE = "Equipment & Services Directory | Euro Gulf Logistics";
 const DESCRIPTION =
   "Live availability for crane hire, trailer rental, container storage, dismantling, installation and rigging. Book available units or join the waitlist.";
 

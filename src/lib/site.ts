@@ -1,9 +1,9 @@
 export const SITE = {
-  name: "IronBridge Logistics",
+  name: "Euro Gulf Logistics",
   tagline: "Heavy Equipment. Handled Right. Every Time.",
   address:
     "Sajaa industrial area, Al Sajaa st, right opposite to Niaz Ahmed building materials",
-  email: "dispatch@ironbridgelogistics.com",
+  email: "dispatch@eurogulflogistics.com",
   phones: ["+971 52 968 8851", "+971 50 637 0557", "+971 56 709 8352"],
   whatsapp: ["+971 52 968 8851", "+971 50 637 0557", "+971 56 709 8352"],
   hours: [
@@ -72,35 +72,35 @@ export const TESTIMONIALS = [
     role: "Project Director, Delta Point EPC Contractors",
     scope: "400-ton crane mobilization for refinery turnaround, 3-week engagement",
     quote:
-      "We had an eleven-day turnaround window and zero margin for a late crane. IronBridge had the unit on site a day early with a full rigging plan already reviewed by our safety team. That kind of preparation is rare in this industry.",
+      "We had an eleven-day turnaround window and zero margin for a late crane. Euro Gulf had the unit on site a day early with a full rigging plan already reviewed by our safety team. That kind of preparation is rare in this industry.",
   },
   {
     name: "Priya Nandakumar",
     role: "Plant Operations Manager, Coastal Steel Fabrication",
     scope: "Full production line dismantling and relocation across two facilities",
     quote:
-      "Dismantling and re-assembling a production line without extending our downtime budget felt impossible until we brought IronBridge in. Their crew documented every connection point before disassembly, which made reinstallation almost plug-and-play.",
+      "Dismantling and re-assembling a production line without extending our downtime budget felt impossible until we brought Euro Gulf in. Their crew documented every connection point before disassembly, which made reinstallation almost plug-and-play.",
   },
   {
     name: "Diego Ferreira",
     role: "Port Logistics Coordinator, Bayline Container Terminal",
     scope: "Ongoing container storage and yard handling contract, ports operations",
     quote:
-      "We manage tight vessel windows and can't have handling delays stack up. IronBridge's yard team communicates constantly, and their container tracking is the most reliable we've worked with among our third-party partners.",
+      "We manage tight vessel windows and can't have handling delays stack up. Euro Gulf's yard team communicates constantly, and their container tracking is the most reliable we've worked with among our third-party partners.",
   },
   {
     name: "Sarah Kowalski",
     role: "Heavy Construction Lead, Northridge Infrastructure Group",
     scope: "Multi-trailer heavy haul for bridge segment delivery, interstate route",
     quote:
-      "Moving oversized bridge segments means permits, escort coordination, and route surveys all have to line up perfectly. IronBridge handled the entire logistics chain and every delivery hit its scheduled window.",
+      "Moving oversized bridge segments means permits, escort coordination, and route surveys all have to line up perfectly. Euro Gulf handled the entire logistics chain and every delivery hit its scheduled window.",
   },
   {
     name: "Anthony Reyes",
     role: "Site Superintendent, Ferrovia Industrial Contractors",
     scope: "Rigging and precision installation of industrial press equipment",
     quote:
-      "Positioning a multi-ton press within millimeter tolerances isn't something you trust to just anyone. IronBridge's rigging crew treated it like their own equipment — methodical, patient, and genuinely skilled.",
+      "Positioning a multi-ton press within millimeter tolerances isn't something you trust to just anyone. Euro Gulf's rigging crew treated it like their own equipment — methodical, patient, and genuinely skilled.",
   },
 ] as const;
 
@@ -124,7 +124,7 @@ export const LOCAL_BUSINESS_JSONLD = {
   "@type": "LocalBusiness",
   name: SITE.name,
   image: IMAGES.hero,
-  url: "https://www.ironbridgelogistics.com",
+  url: "https://www.eurogulflogistics.com",
   telephone: SITE.phones[0],
   priceRange: "$$$",
   address: {

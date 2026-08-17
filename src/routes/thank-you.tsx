@@ -4,9 +4,9 @@ import { CheckCircle2, Clock, FileText, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SITE, telHref } from "@/lib/site";
 
-const TITLE = "Request Received | IronBridge Logistics";
+const TITLE = "Request Received | Euro Gulf Logistics";
 const DESCRIPTION =
-  "Your heavy haulage quote request has reached IronBridge dispatch. Expect a written response within 15 minutes during business hours.";
+  "Your heavy haulage quote request has reached Euro Gulf dispatch. Expect a written response within 15 minutes during business hours.";
 
 export const Route = createFileRoute("/thank-you")({
   head: () => ({

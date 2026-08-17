@@ -35,7 +35,7 @@ import {
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
     meta: [
-      { title: "Dispatch Dashboard | IronBridge Logistics" },
+      { title: "Dispatch Dashboard | Euro Gulf Logistics" },
       { name: "description", content: "Internal dispatch dashboard." },
       { name: "robots", content: "noindex, nofollow" },
     ],

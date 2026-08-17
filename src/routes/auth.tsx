@@ -8,8 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 
-const TITLE = "Staff Sign In | IronBridge Logistics";
-const DESCRIPTION = "Internal sign in for IronBridge Logistics dispatch and yard staff.";
+const TITLE = "Staff Sign In | Euro Gulf Logistics";
+const DESCRIPTION = "Internal sign in for Euro Gulf Logistics dispatch and yard staff.";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
