@@ -4,7 +4,7 @@ import { ClipboardCheck, Gauge, Globe2, HardHat, Route as RouteIcon, Warehouse }
 import { StatCounters } from "@/components/site/StatCounters";
 import { IMAGES } from "@/lib/site";
 
-const TITLE = "About IronBridge Logistics | Heavy Lift Specialists";
+const TITLE = "About Euro Gulf Logistics | Heavy Lift Specialists";
 const DESCRIPTION =
   "A decade of heavy haulage, crane hire and industrial installation across 35+ countries, run by certified operators out of Al Sajaa, Sharjah.";
 
@@ -66,7 +66,7 @@ function AboutPage() {
               Heavy work, handled by people who own the risk
             </h1>
             <p className="mt-6 text-navy-muted">
-              IronBridge Logistics started with two lowbeds and a single crane serving fabrication
+              Euro Gulf Logistics started with two lowbeds and a single crane serving fabrication
               yards in Sharjah. Ten years on we run an owned fleet of multi-axle trailers, crawler
               and all-terrain cranes, and a rigging division that moves production lines without
               extending anyone&rsquo;s downtime budget.
@@ -79,7 +79,7 @@ function AboutPage() {
           </div>
           <img
             src={IMAGES.fleet}
-            alt="IronBridge Logistics trailer and crane fleet lined up at the Al Sajaa yard"
+            alt="Euro Gulf Logistics trailer and crane fleet lined up at the Al Sajaa yard"
             loading="lazy"
             className="aspect-[4/3] w-full rounded object-cover shadow-lift"
           />

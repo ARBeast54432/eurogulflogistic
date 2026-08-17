@@ -24,7 +24,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { FAQS, IMAGES, LOCAL_BUSINESS_JSONLD, SITE, TESTIMONIALS } from "@/lib/site";
 
-const TITLE = "Heavy Equipment Rental & Industrial Logistics | IronBridge Logistics";
+const TITLE = "Heavy Equipment Rental & Industrial Logistics | Euro Gulf Logistics";
 const DESCRIPTION =
   "Cranes, trailers, container storage, rigging and machinery installation with certified crews. 24/7 dispatch from Al Sajaa, Sharjah. Quotes in 15 minutes.";
 
@@ -121,7 +121,7 @@ function Index() {
       <section className="relative isolate">
         <img
           src={IMAGES.hero}
-          alt="Heavy crane lifting industrial cargo at an IronBridge Logistics site"
+          alt="Heavy crane lifting industrial cargo at an Euro Gulf Logistics site"
           className="absolute inset-0 size-full object-cover"
         />
         <div className="hero-overlay absolute inset-0" />

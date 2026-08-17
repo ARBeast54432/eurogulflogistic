@@ -12,9 +12,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { IMAGES, LOCAL_BUSINESS_JSONLD, SITE, telHref, waHref } from "@/lib/site";
 
-const TITLE = "Contact Dispatch | IronBridge Logistics Sharjah";
+const TITLE = "Contact Dispatch | Euro Gulf Logistics Sharjah";
 const DESCRIPTION =
-  "Reach IronBridge Logistics dispatch in Al Sajaa, Sharjah by phone, WhatsApp or email. Written response within 15 minutes during business hours.";
+  "Reach Euro Gulf Logistics dispatch in Al Sajaa, Sharjah by phone, WhatsApp or email. Written response within 15 minutes during business hours.";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -98,7 +98,7 @@ function ContactPage() {
                     {phone}
                   </a>
                   <a
-                    href={waHref(phone, "Hello IronBridge, I need a heavy haulage quote.")}
+                    href={waHref(phone, "Hello Euro Gulf, I need a heavy haulage quote.")}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-amber"
@@ -139,7 +139,7 @@ function ContactPage() {
 
           <div className="overflow-hidden rounded border border-border">
             <iframe
-              title="IronBridge Logistics yard location"
+              title="Euro Gulf Logistics yard location"
               src={SITE.mapEmbed}
               loading="lazy"
               className="h-72 w-full border-0"
