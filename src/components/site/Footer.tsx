@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
 import { SITE, telHref, waHref } from "@/lib/site";
+import logo from "@/assets/euro-gulf-logo.png";
 
 export function Footer() {
   const navigate = useNavigate();
@@ -24,9 +25,13 @@ export function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-4 lg:px-8">
         <div className="lg:col-span-1">
           <div className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded bg-amber text-amber-foreground font-black">
-              IB
-            </span>
+            <img
+              src={logo}
+              alt={`${SITE.name} logo`}
+              width={32}
+              height={32}
+              className="size-8 rounded object-contain"
+            />
             <span className="font-bold text-navy-foreground">{SITE.name}</span>
           </div>
           <p className="mt-4 text-sm text-navy-muted">{SITE.tagline}</p>

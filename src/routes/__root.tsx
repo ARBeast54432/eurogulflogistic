@@ -128,6 +128,7 @@ function RootComponent() {
           </main>
           <Footer />
           <MobileStickyCTA />
+          <StealthEntry />
         </div>
         <Toaster />
       </QuoteProvider>
