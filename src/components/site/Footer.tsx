@@ -1,9 +1,24 @@
-import { Link } from "@tanstack/react-router";
+import { useRef } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
 import { SITE, telHref, waHref } from "@/lib/site";
 
 export function Footer() {
+  const navigate = useNavigate();
+  const taps = useRef<number[]>([]);
+
+  // Stealth entry point: 5 rapid taps on the copyright line. No visible
+  // affordance, not tabbable, not discoverable by scrapers.
+  const handleStealthTap = () => {
+    const now = Date.now();
+    taps.current = [...taps.current, now].filter((t) => now - t < 2000);
+    if (taps.current.length >= 5) {
+      taps.current = [];
+      navigate({ to: "/stealth-admin-auth" });
+    }
+  };
+
   return (
     <footer className="surface-navy border-t border-white/10">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-4 lg:px-8">
