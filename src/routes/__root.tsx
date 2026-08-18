@@ -15,6 +15,7 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { MobileStickyCTA } from "@/components/site/MobileStickyCTA";
 import { QuoteProvider } from "@/components/site/quote-context";
+import { StealthEntry } from "@/components/site/StealthEntry";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
