@@ -15,6 +15,7 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { MobileStickyCTA } from "@/components/site/MobileStickyCTA";
 import { QuoteProvider } from "@/components/site/quote-context";
+import { StealthEntry } from "@/components/site/StealthEntry";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -90,7 +91,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
     ],
   }),
   shellComponent: RootShell,
@@ -127,6 +128,7 @@ function RootComponent() {
           </main>
           <Footer />
           <MobileStickyCTA />
+          <StealthEntry />
         </div>
         <Toaster />
       </QuoteProvider>

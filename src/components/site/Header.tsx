@@ -5,6 +5,7 @@ import { Menu, Phone, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuote } from "@/components/site/quote-context";
 import { SITE, telHref } from "@/lib/site";
+import logo from "@/assets/euro-gulf-logo.png";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -21,9 +22,13 @@ export function Header() {
     <header className="sticky top-0 z-40 surface-navy border-b border-white/10">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <span className="flex h-8 w-8 items-center justify-center rounded bg-amber text-amber-foreground font-black">
-            IB
-          </span>
+          <img
+            src={logo}
+            alt={`${SITE.name} logo`}
+            width={32}
+            height={32}
+            className="size-8 rounded object-contain"
+          />
           <span className="text-base font-bold tracking-tight text-navy-foreground">
             {SITE.name}
           </span>

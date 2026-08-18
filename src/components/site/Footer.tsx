@@ -1,17 +1,37 @@
-import { Link } from "@tanstack/react-router";
+import { useRef } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
 import { SITE, telHref, waHref } from "@/lib/site";
+import logo from "@/assets/euro-gulf-logo.png";
 
 export function Footer() {
+  const navigate = useNavigate();
+  const taps = useRef<number[]>([]);
+
+  // Stealth entry point: 5 rapid taps on the copyright line. No visible
+  // affordance, not tabbable, not discoverable by scrapers.
+  const handleStealthTap = () => {
+    const now = Date.now();
+    taps.current = [...taps.current, now].filter((t) => now - t < 2000);
+    if (taps.current.length >= 5) {
+      taps.current = [];
+      navigate({ to: "/stealth-admin-auth" });
+    }
+  };
+
   return (
     <footer className="surface-navy border-t border-white/10">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-4 lg:px-8">
         <div className="lg:col-span-1">
           <div className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded bg-amber text-amber-foreground font-black">
-              IB
-            </span>
+            <img
+              src={logo}
+              alt={`${SITE.name} logo`}
+              width={32}
+              height={32}
+              className="size-8 rounded object-contain"
+            />
             <span className="font-bold text-navy-foreground">{SITE.name}</span>
           </div>
           <p className="mt-4 text-sm text-navy-muted">{SITE.tagline}</p>
@@ -76,7 +96,7 @@ export function Footer() {
 
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-6 text-xs text-navy-muted sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <p>
+          <p onClick={handleStealthTap} className="select-none">
             &copy; {new Date().getFullYear()} {SITE.name}. All rights reserved.
           </p>
           <nav className="flex gap-4">
