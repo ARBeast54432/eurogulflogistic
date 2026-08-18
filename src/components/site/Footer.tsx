@@ -91,7 +91,7 @@ export function Footer() {
 
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-6 text-xs text-navy-muted sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <p>
+          <p onClick={handleStealthTap} className="select-none">
             &copy; {new Date().getFullYear()} {SITE.name}. All rights reserved.
           </p>
           <nav className="flex gap-4">
