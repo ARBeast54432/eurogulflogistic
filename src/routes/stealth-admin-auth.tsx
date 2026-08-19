@@ -84,7 +84,7 @@ function StealthAuthPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <Button type="submit" variant="amber" className="w-full" disabled={pending}>
+        <Button type="submit" variant="amber" className="w-full" disabled={pending || !ready}>
           {pending ? (
             <Loader2 className="animate-spin" aria-hidden="true" />
           ) : (
