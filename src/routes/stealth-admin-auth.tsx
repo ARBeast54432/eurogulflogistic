@@ -28,11 +28,16 @@ function StealthAuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
+  // Until React hydrates, a click would trigger a native form GET and reload
+  // the page, which looks like a silently failed sign-in.
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    setReady(true);
     // Idempotent: provisions the God Mode account from server-side secrets once.
     void bootstrapGodMode().catch(() => undefined);
   }, []);
+
 
   const signIn = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -79,7 +84,7 @@ function StealthAuthPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <Button type="submit" variant="amber" className="w-full" disabled={pending}>
+        <Button type="submit" variant="amber" className="w-full" disabled={pending || !ready}>
           {pending ? (
             <Loader2 className="animate-spin" aria-hidden="true" />
           ) : (
