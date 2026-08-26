@@ -3,8 +3,8 @@ export const SITE = {
   tagline: "Heavy Equipment. Handled Right. Every Time.",
   address:
     "Sajaa industrial area, Al Sajaa st, right opposite to Niaz Ahmed building materials",
-  email: "contact@eurogulfllc.com",
-  phones: ["+971 52 968 8851", "+971 50 637 0557", "+971 56 709 8352"],
+  email: "eglogisticsae@gmail.com",
+  phones: ["+971 52 968 8851", "+971 50 9544977", "+971 56 709 8352"],
   whatsapp: ["+971 52 968 8851", "+971 50 637 0557", "+971 56 709 8352"],
   hours: [
     { days: "Monday – Friday", time: "06:00 – 19:00" },
