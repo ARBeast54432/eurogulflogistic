@@ -21,3 +21,5 @@ Allow: /
 Disallow: /admin
 Disallow: /stealth-admin-auth
 Disallow: /thank-you
+
+Sitemap: https://eg-logistics.ae/sitemap.xml
