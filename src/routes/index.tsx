@@ -106,7 +106,7 @@ const TRUST = [
   {
     icon: Truck,
     title: "Owned Fleet",
-    text: "No brokered units — our own maintained trailers, cranes and handling gear.",
+    text: "No brokered units our own maintained trailers, cranes and handling gear.",
   },
 ];
 
