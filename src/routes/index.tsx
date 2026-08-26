@@ -26,7 +26,7 @@ import { FAQS, IMAGES, LOCAL_BUSINESS_JSONLD, SITE, TESTIMONIALS } from "@/lib/s
 
 const TITLE = "Heavy Equipment Rental & Industrial Logistics | Euro Gulf Logistics";
 const DESCRIPTION =
-  "Cranes, trailers, container storage, rigging and machinery installation with certified crews. 24/7 dispatch from Al Sajaa, Sharjah. Quotes in 15 minutes.";
+  "Cranes, trailers, container storage, rigging and machinery installation with certified crews. 24/7 dispatch from Al Sajaa, Sharjah.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -100,7 +100,7 @@ const TRUST = [
   },
   {
     icon: Clock,
-    title: "15-Minute Response",
+    title: "Fast Response",
     text: "Written quotes with indicative pricing and availability inside business hours.",
   },
   {
@@ -260,7 +260,7 @@ function Index() {
               Need equipment on site this week?
             </h2>
             <p className="mt-2 text-navy-muted">
-              Send your scope and get a written response in 15 minutes.
+              Send your scope and get a response within a day.
             </p>
           </div>
           <Button variant="amber" size="xl" onClick={() => openQuote()}>
