@@ -6,7 +6,7 @@ import { SITE, telHref } from "@/lib/site";
 
 const TITLE = "Request Received | Euro Gulf Logistics";
 const DESCRIPTION =
-  "Your heavy haulage quote request has reached Euro Gulf dispatch. Expect a written response within 15 minutes during business hours.";
+  "Your heavy haulage quote request has reached Euro Gulf dispatch.";
 
 export const Route = createFileRoute("/thank-you")({
   head: () => ({
@@ -29,7 +29,7 @@ const NEXT_STEPS = [
   },
   {
     icon: Clock,
-    title: "Written response in 15 minutes",
+    title: "Written response within a day",
     text: "You receive indicative pricing, unit availability and any survey requirements.",
   },
   {
