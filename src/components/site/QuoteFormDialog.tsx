@@ -117,8 +117,7 @@ export function QuoteFormDialog({
             Request a Quote
           </DialogTitle>
           <DialogDescription className="text-navy-muted">
-            Four short steps. Written response from dispatch within 15 minutes during
-            business hours.
+            Written response from dispatch personally 
           </DialogDescription>
           <ol className="flex items-center gap-2 pt-2" aria-label="Form progress">
             {STEPS.map((label, index) => (
