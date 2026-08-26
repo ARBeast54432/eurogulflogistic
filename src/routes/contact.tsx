@@ -14,7 +14,7 @@ import { IMAGES, LOCAL_BUSINESS_JSONLD, SITE, telHref, waHref } from "@/lib/site
 
 const TITLE = "Contact Dispatch | Euro Gulf Logistics Sharjah";
 const DESCRIPTION =
-  "Reach Euro Gulf Logistics dispatch in Al Sajaa, Sharjah by phone, WhatsApp or email. Written response within 15 minutes during business hours.";
+  "Reach Euro Gulf Logistics dispatch in Al Sajaa, Sharjah by phone, WhatsApp or email.";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -53,7 +53,7 @@ function ContactPage() {
     onSuccess: () => {
       setForm(EMPTY);
       toast.success("Message sent", {
-        description: "Dispatch will respond within 15 minutes during business hours.",
+        description: "Dispatch will respond during business hours.",
       });
     },
     onError: (error: Error) =>
@@ -77,7 +77,6 @@ function ContactPage() {
           </h1>
           <p className="mt-4 max-w-2xl text-navy-muted">
             Three direct lines, WhatsApp on all of them, and a yard team that answers.
-            Written response within 15 minutes during business hours.
           </p>
         </div>
       </section>
