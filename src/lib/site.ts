@@ -3,7 +3,7 @@ export const SITE = {
   tagline: "Heavy Equipment. Handled Right. Every Time.",
   address:
     "Sajaa industrial area, Al Sajaa st, right opposite to Niaz Ahmed building materials",
-  email: "dispatch@eurogulflogistics.com",
+  email: "contact@eurogulfllc.com",
   phones: ["+971 52 968 8851", "+971 50 637 0557", "+971 56 709 8352"],
   whatsapp: ["+971 52 968 8851", "+971 50 637 0557", "+971 56 709 8352"],
   hours: [
@@ -156,6 +156,9 @@ export const LOCAL_BUSINESS_JSONLD = {
     "Heavy Machinery Dismantling",
     "Machinery Assembling & Installation",
     "Industrial Lashing, Rigging & Loading",
+    "Site Safety Services",
+    "Space / Yard Rental",
+    "Denting & Painting",
   ].map((name) => ({
     "@type": "Offer",
     itemOffered: { "@type": "Service", name },
