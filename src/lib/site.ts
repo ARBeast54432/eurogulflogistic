@@ -124,7 +124,7 @@ export const LOCAL_BUSINESS_JSONLD = {
   "@type": "LocalBusiness",
   name: SITE.name,
   image: IMAGES.hero,
-  url: "https://www.eurogulflogistics.com",
+  url: "https://eg-logistics.ae",
   telephone: SITE.phones[0],
   priceRange: "$$$",
   address: {
