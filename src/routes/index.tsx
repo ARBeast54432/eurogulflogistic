@@ -197,7 +197,17 @@ function Index() {
             </motion.article>
           ))}
         </div>
+        <div className="mt-10 text-center">
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-navy-soft hover:text-amber"
+          >
+            View all services <ArrowRight className="size-4" />
+          </Link>
+        </div>
       </section>
+
+       
 
       {/* Trust grid */}
       <section className="surface-navy">
