@@ -105,18 +105,18 @@ export const TESTIMONIALS = [
 ] as const;
 
 export const IMAGES = {
-  hero: "https://lh3.googleusercontent.com/aida-public/AB6AXuCsLQtEUPs9RrvNwMl9x6Zn3jywPzmbSmkg7Iul8dAFq4oH400rtDBIw7p5C8JllciGvsC2TRmUTi7uvVDIfV_6Y30Pd3-fv7lQsd5znHbUGkTCpnYxa7U9t9TXa1t11LW9PfMvkjC6fiVm-FqP08dDFMXk7OfNGPUixapQG-7pRBxqGER4kb09523K6IDJTOgEF3JlIyhlUXqKW2lWvYG_EOPwxZH6vKR9dGS5D8KxpFKOV8Kp_Z0yTQ",
+  hero: "https://images.pexels.com/photos/7733478/pexels-photo-7733478.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1",
   haulage:
     "https://lh3.googleusercontent.com/aida-public/AB6AXuApM9pzWfEbo1kl4yo621wrLNTwq9LgA3ARQwbzMvpCnuNxayZd6-TC515G5t8Gc8TQwTp0InCAHQ-0Gtq6W8INLaTr-cOUhCtyhd04qfB_hE_lHKisqU1Tmtum3TAlzE7n1q9hARRE3nXJNC2sOy9aaHebfsSOkhxB-_j6MoHJJBp3muVK3AFYtT07DI6hpiXjnJWS8ttvJ7MXBRwP5r1sWlZJAwhjdkoNQdihOTsqfijRS4Jb3krH3Q",
   yard: "https://lh3.googleusercontent.com/aida-public/AB6AXuBB1BOASEUlLlMAdnXW6waJIeYKkehfZfUJr-6vR3GRvAFPqc536fDk4SDHC-dLn5muaZroFETX1PNansIyDr2ovSoS6y6fo_9AvJ-D9Da8SViCjD73uj9yHegghzb04VTyKNhRbBDLJxqkKO5XYabFAaTT-Ki3VtjEq-8fbRgxlUH_Fr_yoe9yzLq8SB6BkCZS8iAsxCR76KDA6ROV2Qml1J_OyBInkdD5eor-EssCPTuuqSP047g1XA",
   rigging:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBjTCIK_eA4ZEd5GMPC7kYpIZvQ-brKmMuR3CDQgXxKF-H3wnJg6dKrDwYdGOEBkBzmIxGAY--BZWyHYQsVjWdv4P7oBs2bQ_eLJkTOrK7HbLD8KvMyO3OOWhLaUAiJdWcuEXqek_6k4ROu4SvptYvTQk4aaFxq1UqHc5CHNUPMeGmIN9PEIPsIbRfBaXymAzSw5q0dQoVG6c7DkZUdeT_G9VWC3hHL51Ggtblpvb8oVVh9q8NDzdaITg",
+    "https://images.pexels.com/photos/209177/pexels-photo-209177.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   assembly:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuA7awRAEvEXn_Q60qeuSDI8oJfa4AlLTOFn8uAfYKZQkETRaEws5m3WAla6atiBTmYXxfTtSquf33saOcN5xuNcMyIidFz5_3nWnn3RvhPwsd9VF-Z8gYdlR5wHhH2S27RPxIpq4kAl97R7ijb3VnjzjXSlzJq12N-sPlecazRTYINRO4uqgbNPx2fJI-QyDQT3jwrJOqXc_M0uIhKHtZ8W3XefUvis8h8gUL_sZkOVQViuaNrCHc0o0g",
+    "https://images.pexels.com/photos/36397940/pexels-photo-36397940.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   dismantling:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBXjtqExIWks3K8qBRy2AJE25rqNgwB-7W-h7SG6g35pi8E-vX9jUcJmlaM01MW3n_pDF_gUfBuuKwkmdtzmmJAicXGvI2uaQIseyb6pGPoTlcm5U32DLQPRBifeSAl3cEQuPuKL3NExA76QkLcypUnLruLrFYFHaFVxTIEQqdKjxD7P5fOfmAXCZ4w7ymVnw1ggd9ySf-61WB1ANBNGJnIsutKR9IOSCfAGfOmNMUwvmfpgrkqSyrqSw",
+    "https://images.pexels.com/photos/22717514/pexels-photo-22717514.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   fleet:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuCW56mNltQ_zsYcO-XEOGaZ1JTgWKxMiJBFAhUC5psSiALUKdXl6HjziOy4gzxRJ4hxv6I2LDMowyDZsZPtwAhJoxsXIr9-GV5Y23c8hBs440YUBzkJyanXrlMnOLHyebXeanUKFG5o5j1e4D6-_Q7nELwGOln8MfnOJX5Yq_sG7qwkABAmWljYgiPJFi4iYiEZcqw2lV4DCS6LtHmm-lNezXOgrG0tLJL1XH7slbrHWpy4rV7ytIiqdw",
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuBjTCIK_eA4ZEd5GMPC7kYpIZvQ-brKmMuR3CDQgXxKF-H3wnJg6dKrDwYdGOEBkBzmIxGAY--BZWyHYQsVjWdv4P7oBs2bQ_eLJkTOrK7HbLD8KvMyO3OOWhLaUAiJdWcuEXqek_6k4ROu4SvptYvTQk4aaFxq1UqHc5CHNUPMeGmIN9PEIPsIbRfBaXymAzSw5q0dQoVG6c7DkZUdeT_G9VWC3hHL51Ggtblpvb8oVVh9q8NDzdaITg",
 } as const;
 
 export const LOCAL_BUSINESS_JSONLD = {
