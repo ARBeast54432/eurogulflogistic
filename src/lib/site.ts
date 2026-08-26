@@ -58,7 +58,7 @@ export const FAQS = [
   },
   {
     q: "What happens after I submit a quote request?",
-    a: "Your request lands directly with dispatch. You get a written response within 15 minutes during business hours, including indicative pricing, equipment availability and next steps.",
+    a: "Your request lands directly with dispatch. You get a written response by our team, including indicative pricing, equipment availability and next steps.",
   },
   {
     q: "Do you offer long-term contract hire?",
