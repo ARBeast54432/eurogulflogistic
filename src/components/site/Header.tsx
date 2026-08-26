@@ -54,7 +54,7 @@ export function Header() {
             className="mono-num flex items-center gap-2 text-sm font-semibold text-navy-foreground"
           >
             <Phone className="size-4 text-amber" />
-            {SITE.phones[0]}
+            {SITE.phones[1]}
           </a>
           <Button variant="amber" size="sm" onClick={() => openQuote()}>
             Get a Quote
