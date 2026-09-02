@@ -3,21 +3,19 @@ import { CheckCircle2, Clock, FileText, Phone } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { SITE, telHref } from "@/lib/site";
+import { buildSeo } from "@/lib/seo";
 
 const TITLE = "Request Received | Euro Gulf Logistics";
-const DESCRIPTION =
-  "Your heavy haulage quote request has reached Euro Gulf dispatch.";
+const DESCRIPTION = "Your heavy haulage quote request has reached Euro Gulf dispatch.";
 
 export const Route = createFileRoute("/thank-you")({
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { name: "robots", content: "noindex, nofollow" },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
-    ],
-  }),
+  head: () =>
+    buildSeo({
+      title: TITLE,
+      description: DESCRIPTION,
+      canonicalPath: "/thank-you",
+      forceNoIndex: true,
+    }),
   component: ThankYouPage,
 });
 
@@ -46,17 +44,12 @@ function ThankYouPage() {
         <span className="flex size-16 items-center justify-center rounded-full bg-amber/15">
           <CheckCircle2 className="size-8 text-amber" aria-hidden="true" />
         </span>
-        <h1 className="mt-6 text-3xl font-black tracking-tight sm:text-4xl">
-          Request received
-        </h1>
+        <h1 className="mt-6 text-3xl font-black tracking-tight sm:text-4xl">Request received</h1>
         <p className="mt-3 max-w-xl text-muted-foreground">
-          Your request is with dispatch now. If it&rsquo;s urgent, call the line below and
-          quote your company name &mdash; we&rsquo;ll pull the request up immediately.
+          Your request is with dispatch now. If it&rsquo;s urgent, call the line below and quote
+          your company name &mdash; we&rsquo;ll pull the request up immediately.
         </p>
-        <a
-          href={telHref(SITE.phones[0])}
-          className="mono-num mt-4 text-lg font-bold text-amber"
-        >
+        <a href={telHref(SITE.phones[0])} className="mono-num mt-4 text-lg font-bold text-amber">
           {SITE.phones[0]}
         </a>
       </div>

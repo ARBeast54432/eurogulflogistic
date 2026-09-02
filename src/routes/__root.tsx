@@ -16,6 +16,9 @@ import { Footer } from "@/components/site/Footer";
 import { MobileStickyCTA } from "@/components/site/MobileStickyCTA";
 import { QuoteProvider } from "@/components/site/quote-context";
 import { StealthEntry } from "@/components/site/StealthEntry";
+import { CookieBanner } from "@/components/site/CookieBanner";
+import { ScrollToTop } from "@/components/site/ScrollToTop";
+import { FloatingContact } from "@/components/site/FloatingContact";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -129,6 +132,9 @@ function RootComponent() {
           <Footer />
           <MobileStickyCTA />
           <StealthEntry />
+          <ScrollToTop />
+          <FloatingContact />
+          <CookieBanner />
         </div>
         <Toaster />
       </QuoteProvider>

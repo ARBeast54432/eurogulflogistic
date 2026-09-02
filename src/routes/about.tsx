@@ -1,24 +1,30 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ClipboardCheck, Gauge, Globe2, HardHat, Route as RouteIcon, Warehouse } from "lucide-react";
+import {
+  ClipboardCheck,
+  Gauge,
+  Globe2,
+  HardHat,
+  Route as RouteIcon,
+  Warehouse,
+} from "lucide-react";
 
 import { StatCounters } from "@/components/site/StatCounters";
 import { IMAGES } from "@/lib/site";
+import { buildSeo } from "@/lib/seo";
 
 const TITLE = "About Euro Gulf Logistics | Heavy Lift Specialists";
 const DESCRIPTION =
   "A decade of heavy haulage, crane hire and industrial installation across 35+ countries, run by certified operators out of Al Sajaa, Sharjah.";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
-      { property: "og:image", content: IMAGES.yard },
-      { name: "twitter:image", content: IMAGES.yard },
-    ],
-  }),
+  head: () =>
+    buildSeo({
+      title: TITLE,
+      description: DESCRIPTION,
+      ogImage: IMAGES.yard,
+      canonicalPath: "/about",
+      includeJsonLd: true,
+    }),
   component: AboutPage,
 });
 

@@ -8,22 +8,21 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { servicesQueryOptions } from "@/lib/services";
 import { IMAGES } from "@/lib/site";
+import { buildSeo } from "@/lib/seo";
 
 const TITLE = "Equipment & Services Directory | Euro Gulf Logistics";
 const DESCRIPTION =
   "Live availability for crane hire, trailer rental, container storage, dismantling, installation and rigging. Book available units or join the waitlist.";
 
 export const Route = createFileRoute("/services")({
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
-      { property: "og:image", content: IMAGES.fleet },
-      { name: "twitter:image", content: IMAGES.fleet },
-    ],
-  }),
+  head: () =>
+    buildSeo({
+      title: TITLE,
+      description: DESCRIPTION,
+      ogImage: IMAGES.fleet,
+      canonicalPath: "/services",
+      includeJsonLd: true,
+    }),
   component: ServicesPage,
   errorComponent: ServicesError,
   notFoundComponent: () => <ServicesError />,
@@ -106,9 +105,7 @@ function ServicesPage() {
                     )}
                   </div>
                   <h2 className="mt-3 text-lg font-bold">{service.title}</h2>
-                  <p className="mt-2 flex-1 text-sm text-muted-foreground">
-                    {service.description}
-                  </p>
+                  <p className="mt-2 flex-1 text-sm text-muted-foreground">{service.description}</p>
                   <Button
                     variant={service.is_available ? "amber" : "outline"}
                     className="mt-6 w-full"

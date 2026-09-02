@@ -23,22 +23,20 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { FAQS, IMAGES, LOCAL_BUSINESS_JSONLD, SITE, TESTIMONIALS } from "@/lib/site";
+import { buildSeo } from "@/lib/seo";
 
 const TITLE = "Heavy Equipment Rental & Industrial Logistics | Euro Gulf Logistics";
 const DESCRIPTION =
   "Cranes, trailers, container storage, rigging and machinery installation with certified crews. 24/7 dispatch from Al Sajaa, Sharjah.";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
-      { property: "og:image", content: IMAGES.hero },
-      { name: "twitter:image", content: IMAGES.hero },
-    ],
-  }),
+  head: () =>
+    buildSeo({
+      title: TITLE,
+      description: DESCRIPTION,
+      ogImage: IMAGES.hero,
+      canonicalPath: "/",
+    }),
   component: Index,
 });
 
@@ -136,9 +134,7 @@ function Index() {
             <h1 className="mt-4 text-4xl font-black leading-tight text-navy-foreground sm:text-5xl lg:text-6xl">
               {SITE.tagline}
             </h1>
-            <p className="mt-6 max-w-2xl text-base text-navy-muted sm:text-lg">
-              {DESCRIPTION}
-            </p>
+            <p className="mt-6 max-w-2xl text-base text-navy-muted sm:text-lg">{DESCRIPTION}</p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Button variant="amber" size="xl" onClick={() => openQuote()}>
                 Request a Quote
@@ -207,8 +203,6 @@ function Index() {
         </div>
       </section>
 
-       
-
       {/* Trust grid */}
       <section className="surface-navy">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -269,9 +263,7 @@ function Index() {
             <h2 className="text-2xl font-black text-navy-foreground sm:text-3xl">
               Need equipment on site this week?
             </h2>
-            <p className="mt-2 text-navy-muted">
-              Send your scope and get a response within a day.
-            </p>
+            <p className="mt-2 text-navy-muted">Send your scope and get a response within a day.</p>
           </div>
           <Button variant="amber" size="xl" onClick={() => openQuote()}>
             Request a Quote

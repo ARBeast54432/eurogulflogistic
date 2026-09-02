@@ -8,18 +8,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { bootstrapGodMode } from "@/lib/admin.functions";
+import { buildSeo } from "@/lib/seo";
+import { PasswordInput } from "@/components/ui/password-input";
 
 const TITLE = "Restricted Access | Euro Gulf Logistics";
 const DESCRIPTION = "Authorised personnel only.";
 
 export const Route = createFileRoute("/stealth-admin-auth")({
-  head: () => ({
-    meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { name: "robots", content: "noindex, nofollow, noarchive" },
-    ],
-  }),
+  head: () =>
+    buildSeo({
+      title: TITLE,
+      description: DESCRIPTION,
+      canonicalPath: "/stealth-admin-auth",
+      forceNoIndex: true,
+    }),
   component: StealthAuthPage,
 });
 
@@ -37,7 +39,6 @@ function StealthAuthPage() {
     // Idempotent: provisions the God Mode account from server-side secrets once.
     void bootstrapGodMode().catch(() => undefined);
   }, []);
-
 
   const signIn = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -75,9 +76,8 @@ function StealthAuthPage() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="a-password">Password</Label>
-          <Input
+          <PasswordInput
             id="a-password"
-            type="password"
             required
             autoComplete="current-password"
             value={password}

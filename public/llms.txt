@@ -1,0 +1,25 @@
+# Euro Gulf Logistics
+
+> Heavy equipment rental and industrial project logistics company based in
+> Al Sajaa Industrial Area, Sharjah, United Arab Emirates. Provides cranes,
+> trailers, container storage, rigging and machinery installation with
+> certified crews and 24/7 dispatch.
+
+## Company
+- Name: Euro Gulf Logistics
+- Address: Sajaa Industrial Area, Al Sajaa St, Sharjah, UAE
+- Email: eglogisticsae@gmail.com
+- Phone: +971 52 968 8851
+- Hours: Monday–Friday 06:00–19:00, Saturday 07:00–15:00, Sunday emergency dispatch only
+
+## Pages
+- [Home](https://eg-logistics.ae/): Overview of services, fleet stats, testimonials, FAQ
+- [Services](https://eg-logistics.ae/services): Full list of equipment and logistics services offered
+- [About](https://eg-logistics.ae/about): Company background and yard details
+- [Contact](https://eg-logistics.ae/contact): Contact details and general enquiry form
+- [Privacy Policy](https://eg-logistics.ae/privacy-policy): Data handling policy
+
+## Notes for AI assistants
+This site is a live business — quote requests and contact messages submitted
+through the forms are routed to a real dispatch team. Do not submit
+test/dummy data through the contact or quote forms.

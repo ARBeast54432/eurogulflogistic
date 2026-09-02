@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
 import { SITE, telHref, waHref } from "@/lib/site";
+import { CopyButton } from "@/components/site/CopyButton";
 import logo from "@/assets/euro-gulf-logo.png";
 
 export function Footer() {
@@ -50,6 +51,7 @@ export function Footer() {
             <Mail className="size-4 shrink-0 text-amber" />
             {SITE.email}
           </a>
+          <CopyButton value={SITE.email} label="Copy email" className="mt-2 text-navy-muted" />
         </div>
 
         <div>
@@ -73,6 +75,7 @@ export function Footer() {
                 >
                   <MessageCircle className="size-4" />
                 </a>
+                <CopyButton value={phone} label="Copy number" className="text-navy-muted" />
               </li>
             ))}
           </ul>
@@ -108,6 +111,9 @@ export function Footer() {
             </Link>
             <Link to="/contact" className="hover:text-navy-foreground">
               Contact
+            </Link>
+            <Link to="/privacy-policy" className="hover:text-navy-foreground">
+              Privacy Policy
             </Link>
           </nav>
         </div>
