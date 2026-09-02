@@ -8,6 +8,8 @@ import {
   Inbox,
   Loader2,
   LogOut,
+  Pencil,
+  Plus,
   PackageSearch,
   ScrollText,
   ShieldAlert,
@@ -23,6 +25,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { ConfirmDialog } from "@/components/site/ConfirmDialog";
 import {
   Table,
   TableBody,
@@ -46,6 +57,7 @@ import {
   contactMessagesQueryOptions,
   quoteRequestsQueryOptions,
   servicesQueryOptions,
+  type Service,
 } from "@/lib/services";
 import {
   createStaffAccount,
@@ -109,8 +121,8 @@ function AdminPage() {
   useLiveSubmissions();
 
   const isSuperAdmin = Boolean(roles?.includes("super_admin"));
-  const hasAccess =
-    isSuperAdmin || Boolean(roles?.some((r) => r === "admin" || r === "staff"));
+  const isAdmin = Boolean(roles?.includes("admin"));
+  const hasAccess = isSuperAdmin || Boolean(roles?.some((r) => r === "admin" || r === "staff"));
 
   const signOut = async () => {
     await queryClient.cancelQueries();
@@ -152,8 +164,8 @@ function AdminPage() {
           <ShieldAlert className="mx-auto size-8 text-amber" aria-hidden="true" />
           <h2 className="mt-4 text-lg font-bold">Access required</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Your account is signed in but has no dashboard role assigned. Ask operations
-            to grant access.
+            Your account is signed in but has no dashboard role assigned. Ask operations to grant
+            access.
           </p>
         </div>
       ) : (
@@ -169,15 +181,15 @@ function AdminPage() {
               <PackageSearch className="size-4" aria-hidden="true" /> Services
             </TabsTrigger>
             <TabsTrigger value="messages">Messages</TabsTrigger>
+            {isSuperAdmin || isAdmin ? (
+              <TabsTrigger value="staff">
+                <Users className="size-4" aria-hidden="true" /> Staff
+              </TabsTrigger>
+            ) : null}
             {isSuperAdmin ? (
-              <>
-                <TabsTrigger value="staff">
-                  <Users className="size-4" aria-hidden="true" /> Staff
-                </TabsTrigger>
-                <TabsTrigger value="audit">
-                  <ScrollText className="size-4" aria-hidden="true" /> Audit logs
-                </TabsTrigger>
-              </>
+              <TabsTrigger value="audit">
+                <ScrollText className="size-4" aria-hidden="true" /> Audit logs
+              </TabsTrigger>
             ) : null}
           </TabsList>
 
@@ -188,20 +200,20 @@ function AdminPage() {
             <QuoteInbox />
           </TabsContent>
           <TabsContent value="services" className="mt-6">
-            <ServicesToggleTable />
+            <ServicesManager canEdit={isSuperAdmin || isAdmin} />
           </TabsContent>
           <TabsContent value="messages" className="mt-6">
             <MessagesTable />
           </TabsContent>
+          {isSuperAdmin || isAdmin ? (
+            <TabsContent value="staff" className="mt-6">
+              <StaffManagement isSuperAdmin={isSuperAdmin} />
+            </TabsContent>
+          ) : null}
           {isSuperAdmin ? (
-            <>
-              <TabsContent value="staff" className="mt-6">
-                <StaffManagement />
-              </TabsContent>
-              <TabsContent value="audit" className="mt-6">
-                <AuditLogs />
-              </TabsContent>
-            </>
+            <TabsContent value="audit" className="mt-6">
+              <AuditLogs />
+            </TabsContent>
           ) : null}
         </Tabs>
       )}
@@ -230,9 +242,7 @@ function LiveOverview() {
       detail: row.subject ?? "General enquiry",
       created_at: row.created_at,
     }));
-    return [...q, ...m]
-      .sort((a, b) => b.created_at.localeCompare(a.created_at))
-      .slice(0, 25);
+    return [...q, ...m].sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 25);
   }, [quotes.data, messages.data]);
 
   if (quotes.isPending || messages.isPending) return <Skeleton className="h-64 w-full" />;
@@ -283,26 +293,61 @@ function StatCard({ label, value }: { label: string; value: number }) {
   );
 }
 
-function ServicesToggleTable() {
+const EMPTY_SERVICE_FORM = {
+  title: "",
+  slug: "",
+  category: "",
+  description: "",
+  long_description: "",
+  image_url: "",
+  is_available: true,
+  sort_order: 0,
+};
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+function ServicesManager({ canEdit }: { canEdit: boolean }) {
   const queryClient = useQueryClient();
   const { data, isPending, isError } = useQuery(servicesQueryOptions());
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editing, setEditing] = useState<Service | null>(null);
+  const [form, setForm] = useState(EMPTY_SERVICE_FORM);
+  const [pendingDelete, setPendingDelete] = useState<{ id: string; title: string } | null>(null);
+
+  const invalidate = () => queryClient.invalidateQueries({ queryKey: ["services"] });
+
+  const openCreate = () => {
+    setEditing(null);
+    setForm(EMPTY_SERVICE_FORM);
+    setDialogOpen(true);
+  };
+
+  const openEdit = (service: Service) => {
+    setEditing(service);
+    setForm({
+      title: service.title,
+      slug: service.slug,
+      category: service.category,
+      description: service.description,
+      long_description: service.long_description ?? "",
+      image_url: service.image_url ?? "",
+      is_available: service.is_available,
+      sort_order: service.sort_order,
+    });
+    setDialogOpen(true);
+  };
 
   const toggle = useMutation({
-    mutationFn: async ({
-      id,
-      next,
-      title,
-    }: {
-      id: string;
-      next: boolean;
-      title: string;
-    }) => {
+    mutationFn: async ({ id, next, title }: { id: string; next: boolean; title: string }) => {
       setSavingId(id);
-      const { error } = await supabase
-        .from("services")
-        .update({ is_available: next })
-        .eq("id", id);
+      const { error } = await supabase.from("services").update({ is_available: next }).eq("id", id);
       if (error) throw error;
       await logStaffAction({
         action: next ? "service.enable" : "service.disable",
@@ -312,53 +357,280 @@ function ServicesToggleTable() {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["services"] });
+      invalidate();
       toast.success("Availability updated");
     },
-    onError: (error: Error) =>
-      toast.error("Update failed", { description: error.message }),
+    onError: (error: Error) => toast.error("Update failed", { description: error.message }),
     onSettled: () => setSavingId(null),
+  });
+
+  const saveMutation = useMutation({
+    mutationFn: async () => {
+      const payload = {
+        title: form.title.trim(),
+        slug: form.slug.trim() || slugify(form.title),
+        category: form.category.trim(),
+        description: form.description.trim(),
+        long_description: form.long_description.trim() || null,
+        image_url: form.image_url.trim() || null,
+        is_available: form.is_available,
+        sort_order: form.sort_order,
+      };
+      if (editing) {
+        const { error } = await supabase.from("services").update(payload).eq("id", editing.id);
+        if (error) throw error;
+        await logStaffAction({
+          action: "service.update",
+          entity: "services",
+          entityId: editing.id,
+          details: { title: payload.title },
+        });
+      } else {
+        const { error } = await supabase.from("services").insert(payload);
+        if (error) throw error;
+        await logStaffAction({
+          action: "service.create",
+          entity: "services",
+          details: { title: payload.title },
+        });
+      }
+    },
+    onSuccess: () => {
+      invalidate();
+      setDialogOpen(false);
+      toast.success(editing ? "Service updated" : "Service created");
+    },
+    onError: (error: Error) => toast.error("Save failed", { description: error.message }),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("services").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: (_data, id) => {
+      invalidate();
+      const title = pendingDelete?.title;
+      setPendingDelete(null);
+      void logStaffAction({
+        action: "service.delete",
+        entity: "services",
+        entityId: id,
+        details: { title },
+      });
+      toast.success("Service deleted");
+    },
+    onError: (error: Error) => {
+      toast.error("Delete failed", { description: error.message });
+      setPendingDelete(null);
+    },
   });
 
   if (isPending) return <Skeleton className="h-64 w-full" />;
   if (isError) return <p className="text-sm text-muted-foreground">Could not load services.</p>;
 
   return (
-    <div className="rounded border border-border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Service</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead className="text-right">Available</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {(data ?? []).map((service) => (
-            <TableRow key={service.id}>
-              <TableCell className="font-semibold">{service.title}</TableCell>
-              <TableCell className="text-muted-foreground">{service.slug}</TableCell>
-              <TableCell className="text-right">
-                <div className="flex items-center justify-end gap-2">
-                  {savingId === service.id ? (
-                    <Loader2
-                      className="size-4 animate-spin text-muted-foreground"
-                      aria-hidden="true"
-                    />
-                  ) : null}
-                  <Switch
-                    checked={service.is_available}
-                    aria-label={`Toggle availability for ${service.title}`}
-                    onCheckedChange={(next) =>
-                      toggle.mutate({ id: service.id, next, title: service.title })
-                    }
-                  />
-                </div>
-              </TableCell>
+    <div className="space-y-4">
+      {canEdit ? (
+        <div className="flex justify-end">
+          <Button variant="amber" size="sm" onClick={openCreate}>
+            <Plus aria-hidden="true" /> Add service
+          </Button>
+        </div>
+      ) : null}
+
+      <div className="overflow-x-auto rounded border border-border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Service</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead className="text-right">Available</TableHead>
+              {canEdit ? <TableHead className="text-right">Edit</TableHead> : null}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {(data ?? []).map((service) => (
+              <TableRow key={service.id}>
+                <TableCell className="font-semibold">{service.title}</TableCell>
+                <TableCell className="text-muted-foreground">{service.category}</TableCell>
+                <TableCell className="text-right">
+                  <div className="flex items-center justify-end gap-2">
+                    {savingId === service.id ? (
+                      <Loader2
+                        className="size-4 animate-spin text-muted-foreground"
+                        aria-hidden="true"
+                      />
+                    ) : null}
+                    <Switch
+                      checked={service.is_available}
+                      disabled={!canEdit}
+                      aria-label={`Toggle availability for ${service.title}`}
+                      onCheckedChange={(next) =>
+                        toggle.mutate({ id: service.id, next, title: service.title })
+                      }
+                    />
+                  </div>
+                </TableCell>
+                {canEdit ? (
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-2">
+                      <Button variant="outline" size="sm" onClick={() => openEdit(service)}>
+                        <Pencil aria-hidden="true" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setPendingDelete({ id: service.id, title: service.title })}
+                      >
+                        <Trash2 aria-hidden="true" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                ) : null}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-xl">
+          <DialogHeader>
+            <DialogTitle>{editing ? "Edit service" : "Add service"}</DialogTitle>
+          </DialogHeader>
+          <form
+            className="space-y-4"
+            onSubmit={(event) => {
+              event.preventDefault();
+              saveMutation.mutate();
+            }}
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="sv-title">Title</Label>
+                <Input
+                  id="sv-title"
+                  required
+                  value={form.title}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      title: e.target.value,
+                      slug: editing ? f.slug : slugify(e.target.value),
+                    }))
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="sv-slug">Slug</Label>
+                <Input
+                  id="sv-slug"
+                  required
+                  value={form.slug}
+                  onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
+                />
+              </div>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="sv-category">Category</Label>
+                <Input
+                  id="sv-category"
+                  required
+                  value={form.category}
+                  onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="sv-sort">Sort order</Label>
+                <Input
+                  id="sv-sort"
+                  type="number"
+                  value={form.sort_order}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, sort_order: Number(e.target.value) || 0 }))
+                  }
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="sv-image">Image URL</Label>
+              <Input
+                id="sv-image"
+                type="url"
+                placeholder="https://…"
+                value={form.image_url}
+                onChange={(e) => setForm((f) => ({ ...f, image_url: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="sv-description">Short description</Label>
+              <Textarea
+                id="sv-description"
+                required
+                rows={2}
+                value={form.description}
+                onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+              />
+              <p className="text-xs text-muted-foreground">Shown on the service card.</p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="sv-long-description">Full details (optional)</Label>
+              <Textarea
+                id="sv-long-description"
+                rows={5}
+                value={form.long_description}
+                onChange={(e) => setForm((f) => ({ ...f, long_description: e.target.value }))}
+              />
+              <p className="text-xs text-muted-foreground">
+                Shown when a visitor expands this service on the Services page.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Switch
+                id="sv-available"
+                checked={form.is_available}
+                onCheckedChange={(v) => setForm((f) => ({ ...f, is_available: v }))}
+              />
+              <Label htmlFor="sv-available">Available now</Label>
+            </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setDialogOpen(false)}
+                disabled={saveMutation.isPending}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" variant="amber" disabled={saveMutation.isPending}>
+                {saveMutation.isPending ? (
+                  <Loader2 className="animate-spin" aria-hidden="true" />
+                ) : null}
+                {editing ? "Save changes" : "Create service"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <ConfirmDialog
+        open={pendingDelete !== null}
+        onOpenChange={(open) => !open && setPendingDelete(null)}
+        title="Delete service"
+        description={
+          pendingDelete
+            ? `This permanently removes "${pendingDelete.title}" from the public services page.`
+            : ""
+        }
+        confirmLabel="Delete service"
+        destructive
+        loading={deleteMutation.isPending}
+        onConfirm={() => {
+          if (pendingDelete) deleteMutation.mutate(pendingDelete.id);
+        }}
+      />
     </div>
   );
 }
@@ -369,10 +641,7 @@ function QuoteInbox() {
 
   const setStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await supabase
-        .from("quote_requests")
-        .update({ status })
-        .eq("id", id);
+      const { error } = await supabase.from("quote_requests").update({ status }).eq("id", id);
       if (error) throw error;
       await logStaffAction({
         action: "quote.status_change",
@@ -382,8 +651,7 @@ function QuoteInbox() {
       });
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["quote_requests"] }),
-    onError: (error: Error) =>
-      toast.error("Status update failed", { description: error.message }),
+    onError: (error: Error) => toast.error("Status update failed", { description: error.message }),
   });
 
   const counts = useMemo(() => {
@@ -394,8 +662,7 @@ function QuoteInbox() {
 
   if (isPending) return <Skeleton className="h-64 w-full" />;
   if (isError) return <p className="text-sm text-muted-foreground">Could not load requests.</p>;
-  if (!data?.length)
-    return <p className="text-sm text-muted-foreground">No quote requests yet.</p>;
+  if (!data?.length) return <p className="text-sm text-muted-foreground">No quote requests yet.</p>;
 
   return (
     <div className="space-y-4">
@@ -468,8 +735,7 @@ function MessagesTable() {
 
   if (isPending) return <Skeleton className="h-64 w-full" />;
   if (isError) return <p className="text-sm text-muted-foreground">Could not load messages.</p>;
-  if (!data?.length)
-    return <p className="text-sm text-muted-foreground">No messages yet.</p>;
+  if (!data?.length) return <p className="text-sm text-muted-foreground">No messages yet.</p>;
 
   return (
     <div className="space-y-3">
@@ -485,16 +751,14 @@ function MessagesTable() {
             </span>
           </div>
           {row.subject ? <p className="mt-2 text-sm font-semibold">{row.subject}</p> : null}
-          <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">
-            {row.message}
-          </p>
+          <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">{row.message}</p>
         </article>
       ))}
     </div>
   );
 }
 
-function StaffManagement() {
+function StaffManagement({ isSuperAdmin }: { isSuperAdmin: boolean }) {
   const queryClient = useQueryClient();
   const list = useServerFn(listStaffAccounts);
   const create = useServerFn(createStaffAccount);
@@ -512,6 +776,9 @@ function StaffManagement() {
     jobTitle: "",
     role: "staff" as "staff" | "admin",
   });
+  const [pendingDelete, setPendingDelete] = useState<{ userId: string; email: string } | null>(
+    null,
+  );
 
   const createMutation = useMutation({
     mutationFn: () => create({ data: form }),
@@ -542,9 +809,13 @@ function StaffManagement() {
     mutationFn: (vars: { userId: string }) => remove({ data: vars }),
     onSuccess: () => {
       refresh();
+      setPendingDelete(null);
       toast.success("Account deleted");
     },
-    onError: (error: Error) => toast.error("Delete failed", { description: error.message }),
+    onError: (error: Error) => {
+      toast.error("Delete failed", { description: error.message });
+      setPendingDelete(null);
+    },
   });
 
   return (
@@ -559,8 +830,9 @@ function StaffManagement() {
         <div className="sm:col-span-2">
           <h2 className="text-sm font-bold">Create employee account</h2>
           <p className="mt-1 text-xs text-muted-foreground">
-            Passwords are stored hashed and cannot be read back by anyone — use the
-            override action to issue a new one.
+            Passwords are stored hashed and cannot be read back by anyone — use the override action
+            to issue a new one.
+            {!isSuperAdmin ? " Admins can create Staff accounts only." : ""}
           </p>
         </div>
         <div className="space-y-2">
@@ -611,7 +883,7 @@ function StaffManagement() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="staff">Staff</SelectItem>
-              <SelectItem value="admin">Admin</SelectItem>
+              {isSuperAdmin ? <SelectItem value="admin">Admin</SelectItem> : null}
             </SelectContent>
           </Select>
         </div>
@@ -650,21 +922,21 @@ function StaffManagement() {
             <TableBody>
               {(staff.data ?? []).map((row) => {
                 const isGod = row.roles.includes("super_admin");
+                const isOtherAdmin = row.roles.includes("admin");
+                // A plain admin cannot touch super_admin or other admin accounts —
+                // only Super Admin can manage those. Enforced server-side too.
+                const restricted = !isSuperAdmin && (isGod || isOtherAdmin);
                 return (
                   <TableRow key={row.user_id}>
                     <TableCell>
-                      <span className="block font-semibold">
-                        {row.full_name ?? row.email}
-                      </span>
+                      <span className="block font-semibold">{row.full_name ?? row.email}</span>
                       <span className="text-xs text-muted-foreground">{row.email}</span>
                     </TableCell>
-                    <TableCell className="text-xs">
-                      {row.roles.join(", ") || "—"}
-                    </TableCell>
+                    <TableCell className="text-xs">{row.roles.join(", ") || "—"}</TableCell>
                     <TableCell>
                       <Switch
                         checked={row.is_active}
-                        disabled={isGod}
+                        disabled={isGod || restricted}
                         aria-label={`Toggle access for ${row.email}`}
                         onCheckedChange={(isActive) =>
                           activeMutation.mutate({ userId: row.user_id, isActive })
@@ -676,7 +948,10 @@ function StaffManagement() {
                         <Button
                           variant="outline"
                           size="sm"
-                          disabled={isGod}
+                          disabled={isGod || restricted || !isSuperAdmin}
+                          title={
+                            !isSuperAdmin ? "Only Super Admin can override passwords" : undefined
+                          }
                           onClick={() => {
                             const newPassword = window.prompt(
                               `New password for ${row.email} (min 8 characters)`,
@@ -690,11 +965,10 @@ function StaffManagement() {
                         <Button
                           variant="outline"
                           size="sm"
-                          disabled={isGod}
-                          onClick={() => {
-                            if (window.confirm(`Delete ${row.email}? This cannot be undone.`))
-                              deleteMutation.mutate({ userId: row.user_id });
-                          }}
+                          disabled={isGod || restricted}
+                          onClick={() =>
+                            setPendingDelete({ userId: row.user_id, email: row.email })
+                          }
                         >
                           <Trash2 aria-hidden="true" />
                         </Button>
@@ -707,6 +981,23 @@ function StaffManagement() {
           </Table>
         </div>
       )}
+
+      <ConfirmDialog
+        open={pendingDelete !== null}
+        onOpenChange={(open) => !open && setPendingDelete(null)}
+        title="Delete employee account"
+        description={
+          pendingDelete
+            ? `This permanently deletes ${pendingDelete.email} and cannot be undone.`
+            : ""
+        }
+        confirmLabel="Delete account"
+        destructive
+        loading={deleteMutation.isPending}
+        onConfirm={() => {
+          if (pendingDelete) deleteMutation.mutate({ userId: pendingDelete.userId });
+        }}
+      />
     </div>
   );
 }
@@ -741,13 +1032,9 @@ function AuditLogs() {
               <TableCell className="mono-num whitespace-nowrap text-xs text-muted-foreground">
                 {new Date(row.created_at).toLocaleString()}
               </TableCell>
-              <TableCell className="text-xs">
-                {row.actor_email ?? row.actor_id}
-              </TableCell>
+              <TableCell className="text-xs">{row.actor_email ?? row.actor_id}</TableCell>
               <TableCell className="text-xs font-semibold">{row.action}</TableCell>
-              <TableCell className="text-xs text-muted-foreground">
-                {row.entity ?? "—"}
-              </TableCell>
+              <TableCell className="text-xs text-muted-foreground">{row.entity ?? "—"}</TableCell>
               <TableCell className="max-w-[280px] truncate text-xs text-muted-foreground">
                 {JSON.stringify(row.details)}
               </TableCell>

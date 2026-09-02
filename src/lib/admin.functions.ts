@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { assertSuperAdmin, writeAudit } from "@/lib/admin.server";
+import { assertStaffManager, assertSuperAdmin, writeAudit } from "@/lib/admin.server";
 
 /**
  * Idempotent bootstrap of the God Mode account from environment variables.
@@ -44,23 +44,22 @@ export const bootstrapGodMode = createServerFn({ method: "POST" }).handler(async
   await supabaseAdmin
     .from("user_roles")
     .upsert({ user_id: userId, role: "super_admin" }, { onConflict: "user_id,role" });
-  await supabaseAdmin.from("staff_accounts").upsert(
-    { user_id: userId, email, full_name: "Super Admin", job_title: "God Mode", is_active: true },
-    { onConflict: "user_id" },
-  );
+  await supabaseAdmin
+    .from("staff_accounts")
+    .upsert(
+      { user_id: userId, email, full_name: "Super Admin", job_title: "God Mode", is_active: true },
+      { onConflict: "user_id" },
+    );
   return { ok: true as const };
 });
 
 export const listStaffAccounts = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    await assertSuperAdmin(context.supabase, context.userId);
+    await assertStaffManager(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const [{ data: staff }, { data: roles }] = await Promise.all([
-      supabaseAdmin
-        .from("staff_accounts")
-        .select("*")
-        .order("created_at", { ascending: true }),
+      supabaseAdmin.from("staff_accounts").select("*").order("created_at", { ascending: true }),
       supabaseAdmin.from("user_roles").select("user_id, role"),
     ]);
     return (staff ?? []).map((row) => ({
@@ -86,7 +85,10 @@ export const createStaffAccount = createServerFn({ method: "POST" })
     },
   )
   .handler(async ({ data, context }) => {
-    await assertSuperAdmin(context.supabase, context.userId);
+    const callerRole = await assertStaffManager(context.supabase, context.userId);
+    if (callerRole === "admin" && data.role === "admin") {
+      throw new Error("Only Super Admin can create Admin accounts");
+    }
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const created = await supabaseAdmin.auth.admin.createUser({
@@ -149,8 +151,17 @@ export const setStaffActive = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { userId: string; isActive: boolean }) => input)
   .handler(async ({ data, context }) => {
-    await assertSuperAdmin(context.supabase, context.userId);
+    const callerRole = await assertStaffManager(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    if (callerRole === "admin") {
+      const { data: target } = await supabaseAdmin
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", data.userId);
+      if ((target ?? []).some((r) => r.role === "admin" || r.role === "super_admin")) {
+        throw new Error("Only Super Admin can manage Admin accounts");
+      }
+    }
     await supabaseAdmin
       .from("staff_accounts")
       .update({ is_active: data.isActive })
@@ -171,7 +182,7 @@ export const deleteStaffAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: { userId: string }) => input)
   .handler(async ({ data, context }) => {
-    await assertSuperAdmin(context.supabase, context.userId);
+    const callerRole = await assertStaffManager(context.supabase, context.userId);
     if (data.userId === context.userId) throw new Error("You cannot delete your own account");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -181,6 +192,9 @@ export const deleteStaffAccount = createServerFn({ method: "POST" })
       .eq("user_id", data.userId);
     if ((target ?? []).some((r) => r.role === "super_admin")) {
       throw new Error("The God Mode account cannot be deleted");
+    }
+    if (callerRole === "admin" && (target ?? []).some((r) => r.role === "admin")) {
+      throw new Error("Only Super Admin can remove Admin accounts");
     }
 
     await supabaseAdmin.from("staff_accounts").delete().eq("user_id", data.userId);

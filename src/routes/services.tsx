@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle2, ChevronDown, XCircle } from "lucide-react";
 
 import { useQuote } from "@/components/site/quote-context";
 import { Badge } from "@/components/ui/badge";
@@ -44,6 +45,7 @@ function ServicesError() {
 function ServicesPage() {
   const { openQuote } = useQuote();
   const { data, isPending, isError } = useQuery(servicesQueryOptions());
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
     <>
@@ -105,7 +107,35 @@ function ServicesPage() {
                     )}
                   </div>
                   <h2 className="mt-3 text-lg font-bold">{service.title}</h2>
-                  <p className="mt-2 flex-1 text-sm text-muted-foreground">{service.description}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{service.description}</p>
+
+                  {service.long_description ? (
+                    <div className="mt-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedId((current) => (current === service.id ? null : service.id))
+                        }
+                        aria-expanded={expandedId === service.id}
+                        className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-amber hover:text-amber/80"
+                      >
+                        {expandedId === service.id ? "Hide details" : "More details"}
+                        <ChevronDown
+                          className={`size-3.5 transition-transform ${
+                            expandedId === service.id ? "rotate-180" : ""
+                          }`}
+                          aria-hidden="true"
+                        />
+                      </button>
+                      {expandedId === service.id ? (
+                        <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">
+                          {service.long_description}
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : null}
+
+                  <div className="flex-1" />
                   <Button
                     variant={service.is_available ? "amber" : "outline"}
                     className="mt-6 w-full"
