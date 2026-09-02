@@ -1,13 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { AlertTriangle, CheckCircle2, ChevronDown, XCircle } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { AlertTriangle, CheckCircle2, Info, X, XCircle } from "lucide-react";
 
 import { useQuote } from "@/components/site/quote-context";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { servicesQueryOptions } from "@/lib/services";
+import { servicesQueryOptions, type Service } from "@/lib/services";
 import { IMAGES } from "@/lib/site";
 import { buildSeo } from "@/lib/seo";
 
@@ -45,7 +46,22 @@ function ServicesError() {
 function ServicesPage() {
   const { openQuote } = useQuote();
   const { data, isPending, isError } = useQuery(servicesQueryOptions());
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<Service | null>(null);
+
+  // Lock body scroll and allow Escape to close while the detail card is open.
+  useEffect(() => {
+    if (!expanded) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setExpanded(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [expanded]);
 
   return (
     <>
@@ -79,11 +95,15 @@ function ServicesPage() {
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {data?.map((service) => (
-              <article
+              <motion.article
                 key={service.id}
+                layoutId={`service-card-${service.id}`}
                 className="flex flex-col overflow-hidden rounded border border-border bg-card shadow-industrial"
               >
-                <div className="aspect-[16/10] overflow-hidden bg-secondary">
+                <motion.div
+                  layoutId={`service-image-${service.id}`}
+                  className="aspect-[16/10] overflow-hidden bg-secondary"
+                >
                   {service.image_url ? (
                     <img
                       src={service.image_url}
@@ -92,7 +112,7 @@ function ServicesPage() {
                       className="size-full object-cover"
                     />
                   ) : null}
-                </div>
+                </motion.div>
                 <div className="flex flex-1 flex-col p-6">
                   <div className="flex items-center justify-between gap-2">
                     <span className="label-caps text-navy-soft">{service.category}</span>
@@ -109,31 +129,14 @@ function ServicesPage() {
                   <h2 className="mt-3 text-lg font-bold">{service.title}</h2>
                   <p className="mt-2 text-sm text-muted-foreground">{service.description}</p>
 
-                  {service.long_description ? (
-                    <div className="mt-2">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setExpandedId((current) => (current === service.id ? null : service.id))
-                        }
-                        aria-expanded={expandedId === service.id}
-                        className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-amber hover:text-amber/80"
-                      >
-                        {expandedId === service.id ? "Hide details" : "More details"}
-                        <ChevronDown
-                          className={`size-3.5 transition-transform ${
-                            expandedId === service.id ? "rotate-180" : ""
-                          }`}
-                          aria-hidden="true"
-                        />
-                      </button>
-                      {expandedId === service.id ? (
-                        <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">
-                          {service.long_description}
-                        </p>
-                      ) : null}
-                    </div>
-                  ) : null}
+                  <button
+                    type="button"
+                    onClick={() => setExpanded(service)}
+                    className="mt-3 inline-flex w-fit items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber hover:text-amber/80"
+                  >
+                    <Info className="size-3.5" aria-hidden="true" />
+                    More Info
+                  </button>
 
                   <div className="flex-1" />
                   <Button
@@ -144,11 +147,89 @@ function ServicesPage() {
                     {service.is_available ? "Request This Unit" : "Join Waitlist"}
                   </Button>
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
         )}
       </section>
+
+      <AnimatePresence>
+        {expanded ? (
+          <motion.div
+            key="service-detail-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+            onClick={() => setExpanded(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="service-detail-title"
+          >
+            <motion.div
+              layoutId={`service-card-${expanded.id}`}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded border border-border bg-card shadow-industrial"
+            >
+              <button
+                type="button"
+                onClick={() => setExpanded(null)}
+                aria-label="Close details"
+                className="absolute right-4 top-4 z-10 flex size-9 items-center justify-center rounded-full bg-navy/80 text-navy-foreground backdrop-blur transition-colors hover:bg-navy"
+              >
+                <X className="size-4" />
+              </button>
+
+              <motion.div
+                layoutId={`service-image-${expanded.id}`}
+                className="aspect-[16/9] shrink-0 overflow-hidden bg-secondary"
+              >
+                {expanded.image_url ? (
+                  <img
+                    src={expanded.image_url}
+                    alt={expanded.title}
+                    className="size-full object-cover"
+                  />
+                ) : null}
+              </motion.div>
+
+              <div className="overflow-y-auto p-6 sm:p-8">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="label-caps text-navy-soft">{expanded.category}</span>
+                  {expanded.is_available ? (
+                    <Badge className="gap-1 bg-success text-success-foreground hover:bg-success">
+                      <CheckCircle2 className="size-3" /> Available Now
+                    </Badge>
+                  ) : (
+                    <Badge className="gap-1 bg-danger text-danger-foreground hover:bg-danger">
+                      <XCircle className="size-3" /> Fully Booked
+                    </Badge>
+                  )}
+                </div>
+                <h2 id="service-detail-title" className="mt-3 text-2xl font-black sm:text-3xl">
+                  {expanded.title}
+                </h2>
+                <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-muted-foreground sm:text-base">
+                  {expanded.long_description || expanded.description}
+                </p>
+
+                <Button
+                  variant={expanded.is_available ? "amber" : "outline"}
+                  className="mt-8 w-full sm:w-auto"
+                  onClick={() => {
+                    const slug = expanded.slug;
+                    setExpanded(null);
+                    openQuote(slug);
+                  }}
+                >
+                  {expanded.is_available ? "Request This Unit" : "Join Waitlist"}
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </>
   );
 }
