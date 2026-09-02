@@ -25,6 +25,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { servicesQueryOptions } from "@/lib/services";
 import { SITE_TYPES } from "@/lib/site";
+import { honeypotFieldProps, useSpamGuard } from "@/lib/spam-guard";
 import { cn } from "@/lib/utils";
 
 type FormState = {
@@ -62,12 +63,15 @@ export function QuoteFormDialog({
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormState>(EMPTY);
   const { data: services } = useQuery(servicesQueryOptions());
+  const { honeypot, setHoneypot, isSpam, reset: resetSpamGuard } = useSpamGuard();
 
   useEffect(() => {
     if (open) {
       setStep(presetService ? 1 : 0);
       setForm({ ...EMPTY, service: presetService ?? "" });
+      resetSpamGuard();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, presetService]);
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
@@ -75,6 +79,7 @@ export function QuoteFormDialog({
 
   const mutation = useMutation({
     mutationFn: async () => {
+      if (isSpam()) return; // silently no-op — see spam-guard.ts for why
       const { error } = await supabase.from("quote_requests").insert({
         customer_name: form.name.trim(),
         email: form.email.trim(),
@@ -151,6 +156,13 @@ export function QuoteFormDialog({
         </DialogHeader>
 
         <div className="space-y-5 p-6">
+          {/* Honeypot — invisible to real users, catches naive form-filling bots */}
+          <input
+            {...honeypotFieldProps}
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+          />
+
           {step === 0 && (
             <fieldset className="space-y-3">
               <legend className="label-caps mb-3 text-muted-foreground">
