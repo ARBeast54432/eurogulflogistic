@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { IMAGES, LOCAL_BUSINESS_JSONLD, SITE, telHref, waHref } from "@/lib/site";
 import { buildSeo } from "@/lib/seo";
+import { honeypotFieldProps, useSpamGuard } from "@/lib/spam-guard";
 
 const TITLE = "Contact Dispatch | Euro Gulf Logistics Sharjah";
 const DESCRIPTION =
@@ -36,6 +37,7 @@ function ContactPage() {
   const [form, setForm] = useState<FormState>(EMPTY);
   const [touched, setTouched] = useState<Partial<Record<keyof FormState, boolean>>>({});
   const [justSubmitted, setJustSubmitted] = useState(false);
+  const { honeypot, setHoneypot, isSpam } = useSpamGuard();
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -43,6 +45,7 @@ function ContactPage() {
 
   const mutation = useMutation({
     mutationFn: async () => {
+      if (isSpam()) return; // silently no-op — see spam-guard.ts for why
       const { error } = await supabase.from("contact_messages").insert({
         full_name: form.name.trim(),
         email: form.email.trim(),
@@ -175,6 +178,13 @@ function ContactPage() {
           {justSubmitted ? (
             <p className="field-success-banner">✓ Message sent — dispatch will respond soon.</p>
           ) : null}
+
+          {/* Honeypot — invisible to real users, catches naive form-filling bots */}
+          <input
+            {...honeypotFieldProps}
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+          />
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
