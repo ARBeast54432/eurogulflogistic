@@ -25,8 +25,15 @@ export type SeoOptions = {
 };
 
 function isPreviewHost() {
-  if (typeof window === "undefined") return false;
-  return window.location.hostname.includes(".vercel.app");
+  // Vercel sets VERCEL_ENV ("production" | "preview" | "development") on
+  // every deployment automatically, server-side. Checking this first means
+  // noindex is correct in the server-rendered HTML itself — the version
+  // crawlers and social-share bots actually read — not just after client
+  // hydration.
+  const vercelEnv = typeof process !== "undefined" ? process.env["VERCEL_ENV"] : undefined;
+  if (vercelEnv) return vercelEnv !== "production";
+  if (typeof window !== "undefined") return window.location.hostname.includes(".vercel.app");
+  return false;
 }
 
 export function buildSeo({
