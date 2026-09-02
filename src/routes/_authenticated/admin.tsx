@@ -464,7 +464,6 @@ function ServicesManager({ canEdit }: { canEdit: boolean }) {
                     ) : null}
                     <Switch
                       checked={service.is_available}
-                      disabled={!canEdit}
                       aria-label={`Toggle availability for ${service.title}`}
                       onCheckedChange={(next) =>
                         toggle.mutate({ id: service.id, next, title: service.title })
