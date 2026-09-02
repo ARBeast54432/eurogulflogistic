@@ -1,0 +1,270 @@
+diff --git a/src/components/site/CookieBanner.tsx b/src/components/site/CookieBanner.tsx
+new file mode 100644
+index 0000000..c5ee2e6
+--- /dev/null
++++ b/src/components/site/CookieBanner.tsx
+@@ -0,0 +1,64 @@
++import { useEffect, useState } from "react";
++import { Cookie, X } from "lucide-react";
++
++import { Button } from "@/components/ui/button";
++
++const STORAGE_KEY = "eg-cookie-consent";
++
++export function CookieBanner() {
++  const [visible, setVisible] = useState(false);
++
++  useEffect(() => {
++    try {
++      const stored = window.localStorage.getItem(STORAGE_KEY);
++      if (!stored) setVisible(true);
++    } catch {
++      // localStorage unavailable (privacy mode, etc.) — show the banner once per session.
++      setVisible(true);
++    }
++  }, []);
++
++  const dismiss = (value: "accepted" | "dismissed") => {
++    try {
++      window.localStorage.setItem(STORAGE_KEY, value);
++    } catch {
++      // ignore write failures, banner will just reappear next visit
++    }
++    setVisible(false);
++  };
++
++  if (!visible) return null;
++
++  return (
++    <div
++      role="region"
++      aria-label="Cookie notice"
++      className="fixed inset-x-0 bottom-0 z-50 animate-in slide-in-from-bottom-4 fade-in duration-300 md:bottom-4 md:left-4 md:right-auto md:max-w-md"
++    >
++      <div className="surface-navy flex flex-col gap-3 border-t border-white/10 p-4 shadow-lift sm:flex-row sm:items-center md:rounded-lg md:border">
++        <Cookie className="hidden size-6 shrink-0 text-amber sm:block" />
++        <p className="flex-1 text-sm text-navy-muted">
++          We use cookies to improve your experience on our site. By continuing to browse, you agree
++          to our use of cookies. See our{" "}
++          <a href="/privacy-policy" className="font-semibold text-amber hover:underline">
++            Privacy Policy
++          </a>{" "}
++          for details.
++        </p>
++        <div className="flex shrink-0 items-center gap-2">
++          <Button variant="amber" size="sm" onClick={() => dismiss("accepted")}>
++            Accept
++          </Button>
++          <button
++            type="button"
++            aria-label="Dismiss cookie notice"
++            onClick={() => dismiss("dismissed")}
++            className="inline-flex size-8 items-center justify-center rounded text-navy-muted transition-colors hover:bg-white/10 hover:text-navy-foreground"
++          >
++            <X className="size-4" />
++          </button>
++        </div>
++      </div>
++    </div>
++  );
++}
+diff --git a/src/components/site/FloatingContactButton.tsx b/src/components/site/FloatingContactButton.tsx
+new file mode 100644
+index 0000000..fa9a8f1
+--- /dev/null
++++ b/src/components/site/FloatingContactButton.tsx
+@@ -0,0 +1,68 @@
++import { useState } from "react";
++import { Link } from "@tanstack/react-router";
++import { Mail, MessageCircle, MessageSquareText, Phone, X } from "lucide-react";
++
++import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
++import { SITE, telHref, waHref } from "@/lib/site";
++
++export function FloatingContactButton() {
++  const [open, setOpen] = useState(false);
++
++  return (
++    <Popover open={open} onOpenChange={setOpen}>
++      <PopoverTrigger asChild>
++        <button
++          type="button"
++          aria-label={open ? "Close contact options" : "Contact us"}
++          className="fixed right-4 bottom-20 z-40 flex size-14 items-center justify-center rounded-full bg-amber text-amber-foreground shadow-lift transition-all duration-300 hover:scale-110 hover:bg-amber-bright active:scale-95 md:right-6 md:bottom-6"
++        >
++          {open ? <X className="size-6" /> : <MessageCircle className="size-6" />}
++        </button>
++      </PopoverTrigger>
++      <PopoverContent
++        side="top"
++        align="end"
++        sideOffset={16}
++        className="w-72 rounded-lg border-white/10 bg-navy p-4 text-navy-foreground shadow-lift"
++      >
++        <p className="label-caps text-amber">Get in touch</p>
++        <p className="mt-1 text-sm text-navy-muted">
++          We usually respond within minutes during business hours.
++        </p>
++
++        <div className="mt-4 flex flex-col gap-1">
++          <a
++            href={telHref(SITE.phones[0])}
++            className="flex items-center gap-3 rounded-md px-2 py-2 text-sm font-semibold transition-colors hover:bg-white/10"
++          >
++            <Phone className="size-4 shrink-0 text-amber" />
++            Call {SITE.phones[0]}
++          </a>
++          <a
++            href={waHref(SITE.whatsapp[0], `Hi ${SITE.name}, I need equipment.`)}
++            target="_blank"
++            rel="noreferrer"
++            className="flex items-center gap-3 rounded-md px-2 py-2 text-sm font-semibold transition-colors hover:bg-white/10"
++          >
++            <MessageSquareText className="size-4 shrink-0 text-amber" />
++            WhatsApp us
++          </a>
++          <a
++            href={`mailto:${SITE.email}`}
++            className="flex items-center gap-3 rounded-md px-2 py-2 text-sm font-semibold transition-colors hover:bg-white/10"
++          >
++            <Mail className="size-4 shrink-0 text-amber" />
++            Email us
++          </a>
++          <Link
++            to="/contact"
++            onClick={() => setOpen(false)}
++            className="mt-2 flex items-center justify-center rounded-md bg-amber px-2 py-2 text-sm font-bold uppercase tracking-widest text-amber-foreground transition-colors hover:bg-amber-bright"
++          >
++            Send a message
++          </Link>
++        </div>
++      </PopoverContent>
++    </Popover>
++  );
++}
+diff --git a/src/components/site/ScrollToTopButton.tsx b/src/components/site/ScrollToTopButton.tsx
+new file mode 100644
+index 0000000..084d97a
+--- /dev/null
++++ b/src/components/site/ScrollToTopButton.tsx
+@@ -0,0 +1,36 @@
++import { useEffect, useState } from "react";
++import { ArrowUp } from "lucide-react";
++
++import { cn } from "@/lib/utils";
++
++const SHOW_AFTER_PX = 400;
++
++export function ScrollToTopButton() {
++  const [visible, setVisible] = useState(false);
++
++  useEffect(() => {
++    const onScroll = () => setVisible(window.scrollY > SHOW_AFTER_PX);
++    onScroll();
++    window.addEventListener("scroll", onScroll, { passive: true });
++    return () => window.removeEventListener("scroll", onScroll);
++  }, []);
++
++  const scrollToTop = () => {
++    window.scrollTo({ top: 0, behavior: "smooth" });
++  };
++
++  return (
++    <button
++      type="button"
++      aria-label="Scroll to top"
++      onClick={scrollToTop}
++      tabIndex={visible ? 0 : -1}
++      className={cn(
++        "fixed right-4 bottom-[136px] z-40 flex size-11 items-center justify-center rounded-full bg-navy text-navy-foreground shadow-lift transition-all duration-300 hover:scale-110 hover:bg-navy-soft active:scale-95 md:right-6 md:bottom-20",
++        visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0",
++      )}
++    >
++      <ArrowUp className="size-5" />
++    </button>
++  );
++}
+diff --git a/src/components/ui/button.tsx b/src/components/ui/button.tsx
+index 41b90f1..dc50415 100644
+--- a/src/components/ui/button.tsx
++++ b/src/components/ui/button.tsx
+@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
+ import { cn } from "@/lib/utils";
+ 
+ const buttonVariants = cva(
+-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
++  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+   {
+     variants: {
+       variant: {
+@@ -28,7 +28,6 @@ const buttonVariants = cva(
+         xl: "h-14 rounded px-8 text-sm",
+         icon: "h-9 w-9",
+       },
+-
+     },
+     defaultVariants: {
+       variant: "default",
+diff --git a/src/routes/__root.tsx b/src/routes/__root.tsx
+index bd23745..bb711e9 100644
+--- a/src/routes/__root.tsx
++++ b/src/routes/__root.tsx
+@@ -14,6 +14,9 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
+ import { Header } from "@/components/site/Header";
+ import { Footer } from "@/components/site/Footer";
+ import { MobileStickyCTA } from "@/components/site/MobileStickyCTA";
++import { CookieBanner } from "@/components/site/CookieBanner";
++import { ScrollToTopButton } from "@/components/site/ScrollToTopButton";
++import { FloatingContactButton } from "@/components/site/FloatingContactButton";
+ import { QuoteProvider } from "@/components/site/quote-context";
+ import { StealthEntry } from "@/components/site/StealthEntry";
+ import { Toaster } from "@/components/ui/sonner";
+@@ -128,6 +131,9 @@ function RootComponent() {
+           </main>
+           <Footer />
+           <MobileStickyCTA />
++          <ScrollToTopButton />
++          <FloatingContactButton />
++          <CookieBanner />
+           <StealthEntry />
+         </div>
+         <Toaster />
+diff --git a/src/styles.css b/src/styles.css
+index b226e50..73a9225 100644
+--- a/src/styles.css
++++ b/src/styles.css
+@@ -148,6 +148,34 @@
+   h4 {
+     letter-spacing: -0.02em;
+   }
++
++  a {
++    transition:
++      color 0.2s ease,
++      background-color 0.2s ease,
++      opacity 0.2s ease;
++  }
++
++  @media (prefers-reduced-motion: reduce) {
++    *,
++    *::before,
++    *::after {
++      animation-duration: 0.01ms !important;
++      animation-iteration-count: 1 !important;
++      transition-duration: 0.01ms !important;
++      scroll-behavior: auto !important;
++    }
++  }
++}
++
++@utility hover-lift {
++  transition:
++    transform 0.2s ease,
++    box-shadow 0.2s ease;
++
++  &:hover {
++    transform: translateY(-2px);
++  }
+ }
+ 
+ @utility label-caps {
