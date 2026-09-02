@@ -14,9 +14,6 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { MobileStickyCTA } from "@/components/site/MobileStickyCTA";
-import { CookieBanner } from "@/components/site/CookieBanner";
-import { ScrollToTopButton } from "@/components/site/ScrollToTopButton";
-import { FloatingContactButton } from "@/components/site/FloatingContactButton";
 import { QuoteProvider } from "@/components/site/quote-context";
 import { StealthEntry } from "@/components/site/StealthEntry";
 import { Toaster } from "@/components/ui/sonner";
@@ -131,9 +128,6 @@ function RootComponent() {
           </main>
           <Footer />
           <MobileStickyCTA />
-          <ScrollToTopButton />
-          <FloatingContactButton />
-          <CookieBanner />
           <StealthEntry />
         </div>
         <Toaster />
