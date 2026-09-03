@@ -1,118 +1,115 @@
-# HeavyLift Rentals
+# Euro Gulf Logistics — Handoff Documentation
 
-Build this app using the HTML files referenced below. You can hotlink the images referenced in the HTML. The attached images are screenshots of the desired screens. Here are public links to the html of the screens which you should read and use to build the app:
+Site: https://eg-logistics.ae
+Stack: TanStack Start (React 19 + SSR) · Tailwind v4 · shadcn/ui · Supabase (Postgres + Auth) · Vercel
 
-1. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY1OTAxZTJiYjkyNmUwNzc5YWU4Yzg0MzIyOTQyEgsSBxCjju6d2AMYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDc4OTY2MjAxNjM1Njk2NDgxOQ&filename=&opi=89354086
-2. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY1OTAxZTM2MjRkZjgwNzNhY2RjNWU5MzM3ZWFlEgsSBxCjju6d2AMYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDc4OTY2MjAxNjM1Njk2NDgxOQ&filename=&opi=89354086
-3. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY1OTAxZTM1NjgwMjUwNzNhY2VkODJmMjc0YzIzEgsSBxCjju6d2AMYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDc4OTY2MjAxNjM1Njk2NDgxOQ&filename=&opi=89354086
-4. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY1OTAxZTM5NWQ2OTEwNWMyYzlhZmRhMjc4MmNlEgsSBxCjju6d2AMYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDc4OTY2MjAxNjM1Njk2NDgxOQ&filename=&opi=89354086
-5. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY1OTAxZTI3YTdlM2MwNTc2MzFmYjMzMWE2Mzc1EgsSBxCjju6d2AMYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDc4OTY2MjAxNjM1Njk2NDgxOQ&filename=&opi=89354086
-6. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY1OTAxZTI0MDM2ZjcwODlhZjZhZmEwMWI2NjE4EgsSBxCjju6d2AMYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDc4OTY2MjAxNjM1Njk2NDgxOQ&filename=&opi=89354086
-7. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY1OTAxZTJlMzhmNDkwMWI0ZTVmOGY0MDRlYWVkEgsSBxCjju6d2AMYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDc4OTY2MjAxNjM1Njk2NDgxOQ&filename=&opi=89354086
-8. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY1OTAxZWRlMGQxMTUwMWE2MzEzNjJkMWVjM2M2EgsSBxCjju6d2AMYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDc4OTY2MjAxNjM1Njk2NDgxOQ&filename=&opi=89354086
-9. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY1OTAxZWQzNGU3OWMwMWE2MmRjMDVlMmZkOGE5EgsSBxCjju6d2AMYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDc4OTY2MjAxNjM1Njk2NDgxOQ&filename=&opi=89354086
-10. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY1OTAxZWQyNmZkZTAwN2M0ZGVhNjUzMjc4OGY2EgsSBxCjju6d2AMYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDc4OTY2MjAxNjM1Njk2NDgxOQ&filename=&opi=89354086
-11. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY1OTAxZWM1ZWQ4NTIwNDczNmNjMTVjMDY1Mjk0EgsSBxCjju6d2AMYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDc4OTY2MjAxNjM1Njk2NDgxOQ&filename=&opi=89354086
-12. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY1OTAxZWRkNDM1ZmUwMWE2Mjk4NmUwMmE2ZmE2EgsSBxCjju6d2AMYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDc4OTY2MjAxNjM1Njk2NDgxOQ&filename=&opi=89354086
-13. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY1OTAxZWJlZjllOTAwMWI0ZTQxMDM0MmFmZTBjEgsSBxCjju6d2AMYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDc4OTY2MjAxNjM1Njk2NDgxOQ&filename=&opi=89354086
-14. https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzAwMDY1OTAxZWQ0ZTgwNDkwMmE5YjQ4NGEyMGMxODFjEgsSBxCjju6d2AMYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDc4OTY2MjAxNjM1Njk2NDgxOQ&filename=&opi=89354086
+This document covers everything needed to run, deploy, and maintain this project from scratch: Supabase setup, environment variables, Vercel deployment, and the permission model.
 
+---
 
-Act as a Principal Full-Stack Engineer. I am providing you with a comprehensive Product Requirements Document (PRD) and UI/UX design specifications (see attached files) for an enterprise logistics, heavy machinery, and equipment rental platform.
+## 1. Tech stack overview
 
-Your task is to build this complete, production-ready web application. 
+- **Frontend/SSR framework:** TanStack Start (file-based routing under `src/routes/`, SSR via Nitro)
+- **Styling:** Tailwind CSS v4 + shadcn/ui (Radix primitives)
+- **Data/backend:** Supabase — Postgres database, Auth (email/password), Row Level Security for all access control
+- **Package manager:** Bun (see `vercel.json` — `bun install` / `bun run build`). `npm` also works for local dev if Bun isn't installed.
+- **Hosting:** Vercel
 
-### TECH STACK REQUIREMENTS
+---
 
-- **Frontend:** React (Vite) + Tailwind CSS + React Router
+## 2. Supabase setup (from scratch)
 
-- **UI Components:** shadcn/ui (use for forms, inputs, buttons, cards, accordions) + Lucide React (for icons)
+If the client already has a Supabase project running, skip to step 3. If setting up fresh (new client Supabase account, migrating environments, etc.):
 
-- **Animations:** Framer Motion (use strictly for subtle hover states and scroll-triggered stat counters as defined in the PRD)
+### 2.1 Create the project
+1. Go to [supabase.com](https://supabase.com), create a new project.
+2. Pick a region close to the UAE if available.
+3. Save the database password somewhere safe — you won't need it directly (the app uses API keys, not the DB password), but Supabase requires it at creation.
 
-- **Backend & Database:** Supabase (PostgreSQL, Auth, and Storage)
+### 2.2 Run the migrations, in this exact order
 
-- **Deployment Target:** Vercel
+Open **SQL Editor** in the Supabase dashboard → New Query. Run each of the following **one at a time, in order** (later ones depend on earlier ones — role-checking functions, RLS policies, etc. are built up incrementally).
 
-### BUILD INSTRUCTIONS & PHASES
+**Files already in the repo** (`supabase/migrations/`) — copy-paste each file's contents and run:
 
-**PHASE 1: SUPABASE & DATABASE INITIALIZATION**
+1. `20260814134608_a91759cc-f8a0-4512-a41a-a73a032a1f14.sql` — creates `services` table + seed data, `quote_requests`, `contact_messages`
+2. `20260814134633_1496b2f2-e25b-405c-8a55-ad6a5b46b7b6.sql`
+3. `20260817030425_d35ec804-2d42-4c0c-991e-96dfa215fae0.sql`
+4. `20260817030514_9b9fd6df-265b-4d20-a79a-9e8a0b9e240c.sql`
+5. `20260817032347_fc1ee053-856e-4233-a479-adfe343369c1.sql`
+6. `20260817032446_32f8f964-23e1-4e44-85a5-707b7911081c.sql` — creates `staff_accounts`, `audit_logs`, `user_roles`, role enum (`user`/`staff`/`admin`/`super_admin`)
+7. `20260819061438_ad941445-b7ed-4f8c-be17-713d5d8c37c0.sql` — fixes an RLS recursion bug, adds `has_role()`/`is_staff()` SECURITY DEFINER functions
+8. `20260902120000_service_editing_and_rls_fix.sql` — adds `long_description` column to `services`, fixes services RLS to allow `super_admin` (not just literal `admin`)
+9. `20260902130000_staff_can_toggle_services.sql` — lets staff toggle service availability, with a trigger that blocks them from editing any other field
 
-Before building the UI, set up the Supabase client and define the schema logic. Provide the SQL commands for me to run in the Supabase SQL Editor to create the following tables:
+### 2.3 Grab your API credentials
 
-1. `services` table: `id` (uuid), `title` (text), `slug` (text), `category` (text), `description` (text), `image_url` (text), `is_available` (boolean, default true), `sort_order` (int), `created_at`.
+Supabase dashboard → **Settings → API**:
 
-2. `quote_requests` table: `id` (uuid), `customer_name` (text), `email` (text), `phone` (text), `service_requested` (text), `project_details` (text), `status` (text, default 'New'), `created_at`.
+| What | Where | Sensitivity |
+|---|---|---|
+| Project URL | Settings → API → "Project URL" | Public, safe to expose |
+| `anon` / `publishable` key | Settings → API → "Project API keys" | Public, safe to expose in browser |
+| `service_role` key | Settings → API → "Project API keys" (click reveal) | **Secret — server only, never in browser code, never in a `VITE_` variable** |
 
-*CRITICAL:* Write the Row Level Security (RLS) policies. `services` must be public read, admin write. `quote_requests` must be public insert, admin read/write.
+---
 
-**PHASE 2: GLOBAL UI & LAYOUT**
+## 3. Environment variables
 
-Build the core layout wrapper, navigation, and footer.
+Set these in **two places**: locally in `.env` (for dev), and in **Vercel → Project Settings → Environment Variables** (for the live deployment). The public ones are already committed in `.env` in the repo (that's intentional — they're safe to be public); the secret ones are **not** in the repo and must be added manually in Vercel.
 
-- **Theme:** Implement the exact color variables in `tailwind.config.js`: Navy Primary (`#0B192C`), Navy Secondary (`#132F4C`), Amber Accent (`#F59E0B`), Slate Background (`#F8FAFC`).
+| Variable | Value | Where it's used |
+|---|---|---|
+| `VITE_SUPABASE_URL` | Project URL | Browser client |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | anon/publishable key | Browser client |
+| `VITE_SUPABASE_PROJECT_ID` | Project ref (e.g. `jiuavcvalwuswikxfhrh`) | Browser client |
+| `SUPABASE_URL` | Same as above, no `VITE_` prefix | Server functions (TanStack server-side auth middleware) |
+| `SUPABASE_PUBLISHABLE_KEY` | Same anon key, no `VITE_` prefix | Server functions |
+| `SUPABASE_SERVICE_ROLE_KEY` | **Secret** service_role key | Admin server functions (staff CRUD, audit logs) — bypasses RLS, so this must never leak to the browser |
+| `GOD_MODE_EMAIL` | The super-admin bootstrap email | One-time bootstrap of the first super_admin account |
+| `GOD_MODE_PASSWORD` | The super-admin bootstrap password | Same — **rotate this if it's ever shared insecurely (e.g. pasted in chat/Slack)** |
+| `VITE_SITE_URL` | `https://eg-logistics.ae` (or whatever the live domain is) | Used to build canonical URLs for SEO |
 
-- **Footer & Contact Hardcoding:** You must hardcode the following exact business details into the Footer, Contact Page, and mobile sticky CTA:
+**Do not** put `SUPABASE_SERVICE_ROLE_KEY`, `GOD_MODE_EMAIL`, or `GOD_MODE_PASSWORD` in any `VITE_`-prefixed variable — anything prefixed `VITE_` gets bundled into the client-side JavaScript and is visible to anyone who views page source.
 
-  - **Location:** Sajaa industrial area, Al Sajaa st, right opposite to Niaz Ahmed building materials.
+---
 
-  - **Phone Numbers:** +971 52 968 8851, +971 50 637 0557, +971 56 709 8352.
+## 4. Vercel deployment
 
-  - **WhatsApp Numbers:** +971 52 968 8851, +971 50 637 0557, +971 56 709 8352.
+1. Go to [vercel.com](https://vercel.com) → **New Project** → import the GitHub repo.
+2. Vercel should auto-detect settings from the committed `vercel.json` (`bun install` / `bun run build`) — no manual build config needed.
+3. Go to **Project Settings → Environment Variables** and add every row from the table in section 3 above (Production, and Preview if you use preview deploys).
+4. Deploy.
+5. Point your domain (`eg-logistics.ae`) at the Vercel project under **Settings → Domains**, if not already done.
 
-**PHASE 3: FRONTEND PAGE IMPLEMENTATION**
+### First-time bootstrap after deploying
 
-Follow the PRD and Stitch designs strictly to build the following routes using React Router:
+Visit `https://<your-domain>/stealth-admin-auth` once. The app automatically calls a bootstrap function on that page load which creates the first `super_admin` account using `GOD_MODE_EMAIL` / `GOD_MODE_PASSWORD`. Sign in with those credentials afterward — that account is the "God Mode" account and can create Admin and Staff accounts from the dashboard's Staff tab.
 
-1. **`/` (Home):** Hero section with overlay, count-up stats via Framer Motion, core services grid, multi-step quote form component, trust grid, and FAQ accordion.
+**This route is intentionally not linked anywhere in the site's navigation** — it's the only way into the admin dashboard, kept out of the public menu on purpose. Don't add a visible link to it.
 
-2. **`/services` (Dynamic Directory):** Fetch real-time data from the Supabase `services` table. If `is_available` is true, render a green "Available Now" badge. If false, render a red "Fully Booked" badge and change the CTA to a "Join Waitlist" state. Implement a skeleton loading state for the fetch.
+---
 
-3. **`/about`:** Build the static precision logistics narrative, fleet capabilities grid, and core values.
+## 5. Permission model (who can do what)
 
-4. **`/contact`:** Standard contact form (writes to a separate email or table), the hardcoded contact details above, and a placeholder `<iframe>` for Google Maps.
+| Role | Services | Staff accounts | Audit log |
+|---|---|---|---|
+| **super_admin** ("God Mode") | Full CRUD (add/edit/delete/toggle) | Create/delete Admin + Staff accounts, override any password | Full read access |
+| **admin** | Full CRUD (add/edit/delete/toggle) | Create/delete **Staff** accounts only — cannot create/delete other Admins or reset passwords | No access |
+| **staff** | Can **only** toggle availability on/off — cannot add, edit details, or delete services (enforced by a database trigger, not just the UI, so it can't be bypassed by calling the API directly) | No access | No access |
 
-5. **`/thank-you`:** 3-step vertical/horizontal timeline graphic and quick-action WhatsApp/Call buttons.
+There is exactly **one** `super_admin` account, bootstrapped once via `GOD_MODE_EMAIL`/`GOD_MODE_PASSWORD`. It cannot be deleted through the dashboard (the delete function explicitly blocks it).
 
-6. **`/404`:** Industrial-themed custom 404 page.
+---
 
-**PHASE 4: SECURE ADMIN DASHBOARD**
+## 6. What's already built
 
-1. **`/admin`:** Build a protected route requiring Supabase Auth.
+- Public site: Home, Services (with expandable service details), About, Contact, Privacy Policy
+- Quote request form + general contact form, both write to Supabase and show up in the dashboard
+- Full SEO: per-page meta titles/descriptions, canonical URLs, LocalBusiness JSON-LD structured data, `robots.txt` (allows AI crawlers), `sitemap.xml`, `llms.txt`
+- Admin dashboard (`/admin`, gated behind `/stealth-admin-auth`): live overview, quote inbox, contact messages, full services management, staff management, audit log (super_admin only)
+- Global UI: cookie banner, scroll-to-top, floating contact button, copy-to-clipboard on emails/phones, password visibility toggle, form validation states, confirmation modals on destructive actions
 
-2. Build a **Services Management Tab**: A data table mapping the `services` table. Include a live, functional shadcn/ui `Switch` component on each row that instantly updates the `is_available` boolean in Supabase when toggled.
+## 7. Known gaps / things to flag to whoever takes this over
 
-3. Build a **Quote Inbox Tab**: A data table reading from `quote_requests` with a dropdown to update lead status (New, In Progress, Completed).
-
-### STRICT EXECUTION RULES
-
-- Do not use mock data arrays for the services page. It must fetch from Supabase.
-
-- Ensure the Mobile Sticky CTA (Call/Quote) only appears on screens < 768px.
-
-- Follow all SEO & Accessibility rules outlined in the PRD (Alt text, JSON-LD schema injection using `react-helmet` or standard script tags).
-
-- Write clean, modular, componentized React code. Do not dump everything into massive single files. 
-
-Execute the build step-by-step. Start by generating the Supabase SQL schema, then initialize the Vite project and Tailwind config, and proceed through the phases.
-
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/167e140e-71c0-44c0-aced-30808afbd7e5).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
+- If `GOD_MODE_PASSWORD` was ever shared over chat, Slack, email, etc., rotate it before handoff — change the env var and re-run the bootstrap, or update it directly for that user in Supabase Auth.
