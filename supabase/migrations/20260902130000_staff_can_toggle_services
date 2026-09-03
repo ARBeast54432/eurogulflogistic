@@ -1,0 +1,42 @@
+-- Let staff toggle service availability, while keeping full editing
+-- (title, description, image, etc.) restricted to admin/super_admin.
+
+-- 1. Replace the update policy so staff can attempt an UPDATE at all.
+--    (Insert/delete stay admin+super_admin only — staff can't add or
+--    remove services, only flip availability on existing ones.)
+DROP POLICY IF EXISTS "Admins and super admins can update services" ON public.services;
+
+CREATE POLICY "Staff, admins and super admins can update services" ON public.services
+  FOR UPDATE TO authenticated
+  USING (public.is_staff(auth.uid()))
+  WITH CHECK (public.is_staff(auth.uid()));
+
+-- 2. A plain RLS policy can't say "staff may change is_available but no
+--    other column" — that needs a trigger that compares OLD vs NEW.
+CREATE OR REPLACE FUNCTION public.restrict_staff_service_updates()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+  IF public.has_role(auth.uid(), 'staff')
+     AND NOT public.has_role(auth.uid(), 'admin')
+     AND NOT public.has_role(auth.uid(), 'super_admin')
+  THEN
+    IF NEW.title IS DISTINCT FROM OLD.title
+       OR NEW.slug IS DISTINCT FROM OLD.slug
+       OR NEW.category IS DISTINCT FROM OLD.category
+       OR NEW.description IS DISTINCT FROM OLD.description
+       OR NEW.long_description IS DISTINCT FROM OLD.long_description
+       OR NEW.image_url IS DISTINCT FROM OLD.image_url
+       OR NEW.sort_order IS DISTINCT FROM OLD.sort_order
+    THEN
+      RAISE EXCEPTION 'Staff can only toggle availability, not edit other service fields';
+    END IF;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS services_restrict_staff_update ON public.services;
+CREATE TRIGGER services_restrict_staff_update
+  BEFORE UPDATE ON public.services
+  FOR EACH ROW
+  EXECUTE FUNCTION public.restrict_staff_service_updates();
